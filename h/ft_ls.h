@@ -28,7 +28,6 @@ typedef struct	s_argv
 	int				flags;
 }				t_args;
 
-size_t			ft_tablen(void **array);
 t_args			*get_args(int argc, char **argv, int const *flags);
 
 #endif

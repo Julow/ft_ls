@@ -24,7 +24,7 @@ O_FILES = $(addprefix $(O_DIR),$(C_FILES:.c=.o))
 all: $(NAME)
 
 $(NAME): libft $(O_FILES)
-	@gcc -O2 -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && echo "	\033[1;30m-->>    \033[0;32m$@\033[0;0m" || echo "\033[0;31m$@\033[0;0m"
+	@gcc -O2 -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && echo "\033[0;32m$@			\033[1;30m<<--\033[0;0m" || echo "\033[0;31m$@\033[0;0m"
 
 libft:
 	@(make -C $(LIBFT) || (echo "\033[0;31m$@\033[0;0m" && exit 1)) | grep -v "Nothing to be done" || echo "" > /dev/null
