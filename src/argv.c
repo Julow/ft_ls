@@ -28,6 +28,7 @@ static void		add_arg(t_args *args, char *add)
 	free(tmp);
 	args->args[i] = ft_strdup(add);
 	args->args[i + 1] = NULL;
+	args->args_count++;
 }
 
 static void		read_flags(t_args *args, char *str, int const *flags)
@@ -38,17 +39,19 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 	{
 		i = -2;
 		while (flags[(i += 2)] != 0)
+		{
 			if (((char)flags[i]) == *str)
 			{
 				args->flags = args->flags | flags[i + 1];
 				break ;
 			}
+		}
 		if (flags[i] == 0)
 		{
-			ft_putstr(args->program);
-			ft_putstr(": illegal option -- ");
-			ft_putchar(*str);
-			ft_putstr("\nusage: ft_ls [-bl] [file ...]\n");
+			ft_putstr_fd(args->program, 2);
+			ft_putstr_fd(": illegal option -- ", 2);
+			ft_putchar_fd(*str, 2);
+			ft_putstr_fd("\nusage: ft_ls [-bl] [file ...]\n", 2);
 			exit(2);
 		}
 	}
@@ -61,6 +64,7 @@ t_args			*get_args(int argc, char **argv, int const *flags)
 	args = MAL1(t_args);
 	args->program = ft_strdup(*argv);
 	args->args = ft_memalloc(1);
+	args->args_count = 0;
 	args->flags = 0;
 	while (--argc > 0 && argv++)
 	{
