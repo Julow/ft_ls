@@ -13,22 +13,29 @@
 NAME = libft.a
 
 H_DIR = ./
-C_DIR = ./
+C_DIR = srcs/
 O_DIR = o/
 
-C_FILES = $(shell ls -1 | grep "ft_" | grep ".c")
+FLAGS = -Wall -Wextra -Werror -O2
+
+C_FILES = $(shell ls -1 $(C_DIR) | grep ".c")
 
 O_FILES = $(addprefix $(O_DIR),$(C_FILES:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(O_FILES)
-	@ar rc $@ $^ && echo "\033[0;32m$@			\033[1;30m<<--\033[0;0m" || echo "\033[0;31m$@\033[0;0m"
+	@ar rc $@ $^ && printf "\033[0;32m" || printf "\033[0;31m"
+	@printf "%-24s\033[1;30m<<--\033[0;0m\n" "$@"
 	@ranlib $@
 
 $(O_DIR)%.o: $(C_DIR)%.c
 	@mkdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
-	@gcc -Wall -Wextra -Werror -I$(H_DIR) -O2 -o $@ -c $< && echo "\033[0;0m$<		\033[1;30m-->>	\033[0;32m$@\033[0;0m" || (echo "\033[0;0m$<		\033[1;30m-->>	\033[0;31m$@\033[0;0m" && exit 1)
+	@printf "\033[0;0m%-24s\033[1;30m-->>	" "$<"
+	@gcc $(FLAGS) -I$(H_DIR) -o $@ -c $< && printf "\033[0;32m$@" || (printf "\033[0;31m$@" && exit 1)
+	@printf "\033[0;0m\n"
+
+debug: _debug all clean
 
 clean:
 	@rm $(O_FILES) 2> /dev/null || echo "" > /dev/null
@@ -39,4 +46,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+_debug:
+	$(eval FLAGS += -g)
+
+.PHONY: all debug clean fclean re _debug
