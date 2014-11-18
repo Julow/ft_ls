@@ -38,6 +38,9 @@ clean: _clean _libsclean
 
 fclean: _clean _libsfclean _fclean
 
+update: fclean
+	@git subtree pull --prefix=libft --squash ../libft master -m "Update libft"
+
 re: fclean all
 
 $(O_DIR)%.o: $(C_DIR)%.c
@@ -61,4 +64,4 @@ _libsclean:
 _libsfclean:
 	@make -C $(LIBFT) fclean
 
-.PHONY: all libs debug clean fclean re _debug _clean _fclean _libsclean _libsfclean
+.PHONY: all libs debug clean fclean update re _debug _clean _fclean _libsclean _libsfclean
