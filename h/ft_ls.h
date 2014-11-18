@@ -15,12 +15,6 @@
 
 # include "libft.h"
 # include <stdlib.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <errno.h>
-# include <unistd.h>
-# include <strings.h>
-# include <sys/ioctl.h>
 
 # define FLAG(m)	((args->flags & m) == m)
 
@@ -36,17 +30,6 @@ typedef struct	s_argv
 	int				args_count;
 	int				flags;
 }				t_args;
-
-typedef struct	s_file
-{
-	char			*name;
-}				t_file;
-
-typedef struct	s_fdir
-{
-	char			*name;
-	DIR				*dir;
-}				t_fdir;
 
 t_args			*get_args(int argc, char **argv);
 
