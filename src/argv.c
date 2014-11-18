@@ -12,6 +12,22 @@
 
 #include "ft_ls.h"
 
+static void		inflate_flags(int **flags)
+{
+	int				len;
+	const int		tmp[] = {
+
+	'l', FLAG_L,
+	'a', FLAG_A,
+	'A', FLAG_AA,
+	'd', FLAG_D,
+	0};
+	len = 9;
+	*flags = MAL(int, len);
+	while (--len >= 0)
+		(*flags)[len] = tmp[len];
+}
+
 static void		add_arg(t_args *args, char *add)
 {
 	char			**tmp;
@@ -57,27 +73,28 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 	}
 }
 
-t_args			*get_args(int argc, char **argv, int const *flags)
+t_args			*get_args(int argc, char **argv)
 {
 	t_args			*args;
+	int				*flags;
 
 	args = MAL1(t_args);
 	args->program = ft_strdup(*argv);
 	args->args = ft_memalloc(1);
 	args->args_count = 0;
 	args->flags = 0;
+	inflate_flags(&flags);
 	while (--argc > 0 && argv++)
-	{
 		if (ft_strequ(*argv, "--"))
 			break ;
-		if (**argv == '-')
+		else if (**argv == '-')
 			read_flags(args, *argv, flags);
 		else
 		{
 			add_arg(args, *argv);
 			break ;
 		}
-	}
+	free(flags);
 	while (--argc > 0 && argv++)
 		add_arg(args, *argv);
 	if (ft_tablen((void**)args->args) == 0)

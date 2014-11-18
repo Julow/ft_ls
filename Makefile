@@ -17,31 +17,48 @@ C_DIR = src/
 O_DIR = o/
 LIBFT = libft/
 
-C_FILES = $(shell ls -1t $(C_DIR) | grep ".c")
+FLAGS = -Wall -Wextra -Werror -O2
+
+C_FILES = $(shell ls -1 $(C_DIR) | grep ".c")
 
 O_FILES = $(addprefix $(O_DIR),$(C_FILES:.c=.o))
 
 all: $(NAME)
 
-$(NAME): libft $(O_FILES)
-	@gcc -O2 -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && echo "\033[0;32m$@			\033[1;30m<<--\033[0;0m" || echo "\033[0;31m$@\033[0;0m"
+$(NAME): libs $(O_FILES)
+	@gcc $(FLAGS) -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && printf "\033[0;32m"  || printf "\033[0;31m"
+	@printf "%-24s\033[1;30m<<--\033[0;0m\n" "$@"
 
-libft:
+libs:
 	@(make -C $(LIBFT) || (echo "\033[0;31m$@\033[0;0m" && exit 1)) | grep -v "Nothing to be done" || echo "" > /dev/null
 
-$(O_DIR)%.o: $(C_DIR)%.c
-	@mkdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
-	@gcc -Wall -Wextra -Werror -O2 -I$(H_DIR) -I$(LIBFT) -L$(LIBFT) -lft -o $@ -c $< && echo "\033[0;0m$<		\033[1;30m-->>	\033[0;32m$@\033[0;0m" || (echo "\033[0;0m$<		\033[1;30m-->>	\033[0;31m$@\033[0;0m" && exit 1)
+debug: _clean _debug all _clean
 
-clean:
-	@rm $(O_FILES) 2> /dev/null || echo "" > /dev/null
-	@rmdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
-	@make -C $(LIBFT) clean
+clean: _clean _libsclean
 
-fclean: clean
-	@rm $(NAME) 2> /dev/null || echo "" > /dev/null
-	@make -C $(LIBFT) fclean
+fclean: _clean _libsfclean _fclean
 
 re: fclean all
 
-.PHONY: all libft clean fclean re
+$(O_DIR)%.o: $(C_DIR)%.c
+	@mkdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
+	@printf "\033[0;0m%-24s\033[1;30m-->>	" "$<"
+	@gcc $(FLAGS) -I$(H_DIR) -I$(LIBFT) -L$(LIBFT) -lft -o $@ -c $< && printf "\033[0;32m$@\033[0;0m\n" "$<" || (printf "\033[0;31m$@\033[0;0m\n" && exit 1)
+
+_debug:
+	$(eval FLAGS += -g)
+
+_clean:
+	@rm $(O_FILES) 2> /dev/null || echo "" > /dev/null
+	@rmdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
+
+_fclean:
+	@rm $(NAME) 2> /dev/null || echo "" > /dev/null
+
+_libsclean:
+	@make -C $(LIBFT) clean
+
+_libsfclean:
+	@make -C $(LIBFT) fclean
+
+.PHONY: all libs debug clean fclean re _debug _clean _fclean _libsclean _libsfclean

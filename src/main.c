@@ -12,64 +12,33 @@
 
 #include "ft_ls.h"
 
-static void		ls_file(t_array *array, char *name, t_args *args)
+static void		ls(t_string *out, t_args *args)
 {
-	t_string		*tmp;
+	t_array			*errs;
+	t_array			*files;
+	t_array			*dirs;
+	int				i;
 
-	if (!FLAG(FLAG_AA) && name[0] == '.')
-		return;
-	else if (!FLAG(FLAG_A) && (ft_strequ(name, ".") || ft_strequ(name, "..")))
-		return;
-	tmp = ft_stringnew();
-	ft_stringadd(tmp, name);
-	ft_arrayadd(array, tmp);
-}
-
-static void		ls_dir(t_array *files, DIR *dir, t_args *args)
-{
-	struct dirent	*ent;
-
-	while ((ent = readdir(dir)) != NULL)
-		ls_file(files, ent->d_name, args);
+	//
+	stringsort(errs);
+	i = -1;
+	while (++i < errs->length)
+	{
+		ft_stringadd(out, ((t_string*)(errs->data[i]))->content);
+		ft_stringkil((t_string**)&(errs->data[i]));
+	}
+	ft_arraykil(&errs, NULL);
 }
 
 int				main(int argc, char **argv)
 {
-	const int		flags[] = {'l', FLAG_L, 'a', FLAG_A, 'A', FLAG_AA, 0};
 	t_args			*args;
-	DIR				*dir;
-	t_string		*output;
-	t_array			*files;
-	int				i;
+	t_string		*out;
 
-	args = get_args(argc, argv, flags);
-	output = ft_stringnew();
-	i = 0;
-	while (i < args->args_count)
-	{
-		dir = opendir(args->args[i]);
-		if (dir == NULL)
-		{
-			//ls_file(files, args->args[i], args);
-			ft_putstr(args->args[i]);
-			ft_putchar('\n');
-		}
-		else
-		{
-			files = ft_arraynew();
-			if (args->args_count > 1)
-			{
-				if (i > 0)
-					ft_stringaddc(output, '\n');
-				ft_stringadd(output, args->args[i]);
-				ft_stringadd(output, ":\n");
-			}
-			ls_dir(files, dir, args);
-			closedir(dir);
-			colum_add(output, files, 150);
-		}
-		i++;
-	}
-	ft_stringput(output);
+	args = get_args(argc, argv);
+	out = ft_stringnew();
+	ls(out, args);
+	ft_stringput(out);
+	ft_stringkil(&out);
 	return (0);
 }

@@ -17,12 +17,17 @@
 # include <stdlib.h>
 # include <dirent.h>
 # include <sys/stat.h>
+# include <errno.h>
+# include <unistd.h>
+# include <strings.h>
+# include <sys/ioctl.h>
 
 # define FLAG(m)	((args->flags & m) == m)
 
 # define FLAG_L		(1)
 # define FLAG_A		((1 << 2) + (1 << 1))
 # define FLAG_AA	(1 << 2)
+# define FLAG_D		(1 << 3)
 
 typedef struct	s_argv
 {
@@ -32,8 +37,21 @@ typedef struct	s_argv
 	int				flags;
 }				t_args;
 
-t_args			*get_args(int argc, char **argv, int const *flags);
+typedef struct	s_file
+{
+	char			*name;
+}				t_file;
 
-void			colum_add(t_string *output, t_array *array, int width);
+typedef struct	s_fdir
+{
+	char			*name;
+	DIR				*dir;
+}				t_fdir;
+
+t_args			*get_args(int argc, char **argv);
+
+void			colum_add(t_string *output, t_array *array);
+
+void			stringsort(t_array *array);
 
 #endif
