@@ -12,22 +12,40 @@
 
 #include "ft_ls.h"
 
-void			stringsort(t_array *array)
+static void		ft_arrayswap(t_array *array, int i1, int i2)
 {
-	t_string		*tmp1;
-	t_string		*tmp2;
-	int				i;
+	void			*tmp;
 
-	i = 0;
+	tmp = array->data[i1];
+	array->data[i1] = array->data[i2];
+	array->data[i2] = tmp;
+}
+
+void			ft_mapsort(t_array *array)
+{
+	int				i;
+	int				j;
+	int				small;
+	int				small_i;
+	int				diff;
+
+	small_i = 0;
+	i = -1;
 	while (++i < array->length)
 	{
-		tmp1 = (t_string*)(array->data[i - 1]);
-		tmp2 = (t_string*)(array->data[i]);
-		if (ft_strcmp(tmp1->content, tmp2->content) < 0)
+		small = 0;
+		j = i;
+		while (++j < array->length)
 		{
-			array->data[i - 1] = tmp2;
-			array->data[i] = tmp1;
-			i = 0;
+			diff = ft_strcmp(((t_map*)(array->data[j]))->key,
+				((t_map*)(array->data[i]))->key);
+			if (diff < small)
+			{
+				small_i = j;
+				small = diff;
+			}
 		}
+		if (small_i > i)
+			ft_arrayswap(array, small_i, i);
 	}
 }

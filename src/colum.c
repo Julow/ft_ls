@@ -21,8 +21,6 @@ static int		get_width(void)
 {
 	struct ttysize	ts;
 
-	if (!isatty(0))
-		return (0);
 	ioctl(0, TIOCGSIZE, &ts);
 	return (ts.ts_cols);
 }
