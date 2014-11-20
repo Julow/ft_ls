@@ -18,6 +18,8 @@
 # include <dirent.h>
 # include <sys/ioctl.h>
 # include <sys/stat.h>
+# include <pwd.h>
+# include <grp.h>
 # include <errno.h>
 # include <string.h>
 

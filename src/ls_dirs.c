@@ -15,14 +15,26 @@
 static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 {
 	t_array			*files;
+	int				total;
 	struct dirent	*dirent;
+	t_file			*tmp;
 
+	total = 0;
 	files = ft_arraynew();
 	while ((dirent = readdir(((t_file*)dir->value)->dir)) != NULL)
 	{
-		ft_arrayadd(files, ft_mapnew(dirent->d_name, filenew(dirent->d_name,
-			((t_file*)dir->value)->path->content, NULL)));
+		if (!FLAG(FLAG_A) && (ft_strequ(dirent->d_name, ".") || ft_strequ(dirent->d_name, "..")))
+			continue;
+		else if (!FLAG(FLAG_AA) && (dirent->d_name[0] == '.'))
+			continue;
+		tmp = filenew(dirent->d_name, ((t_file*)dir->value)->path->content,
+			NULL);
+		total += tmp->stats->st_blocks;
+		ft_arrayadd(files, ft_mapnew(dirent->d_name, tmp));
 	}
+	ft_stringadd(output, "total ");
+	ft_stringaddi(output, total);
+	ft_stringaddc(output, '\n');
 	ls_files(output, files, args);
 	ft_arraykil(&files, &free);
 }

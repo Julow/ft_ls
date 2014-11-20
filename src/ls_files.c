@@ -12,12 +12,56 @@
 
 #include "ft_ls.h"
 
+static char		get_special_mode(mode_t ifmt)
+{
+	if (ifmt == S_IFDIR || ifmt == S_IFSOCK)
+		return ((ifmt == S_IFDIR) ? 'd' : 's');
+	if (ifmt == S_IFCHR || ifmt == S_IFIFO)
+		return ((ifmt == S_IFCHR) ? 'c' : 'p');
+	if (ifmt == S_IFLNK || ifmt == S_IFBLK)
+		return ((ifmt == S_IFLNK) ? 'l' : 'b');
+	return ('-');
+}
+
+static void		get_modes(t_string *output, mode_t mode)
+{
+	ft_stringaddc(output, get_special_mode(mode & S_IFMT));
+	ft_stringaddc(output, (mode & (1 << (9 - 1))) ? 'r' : '-');
+	ft_stringaddc(output, (mode & (1 << (9 - 2))) ? 'w' : '-');
+	if (mode & (1 << (9 - 3)))
+		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 's' : 'x');
+	else
+		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'S' : '-');
+	ft_stringaddc(output, (mode & (1 << (9 - 4))) ? 'r' : '-');
+	ft_stringaddc(output, (mode & (1 << (9 - 5))) ? 'w' : '-');
+	if (mode & (1 << (9 - 3)))
+		ft_stringaddc(output, (mode & (1 << (12 - 2))) ? 's' : 'x');
+	else
+		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'S' : '-');
+	ft_stringaddc(output, (mode & (1 << (9 - 7))) ? 'r' : '-');
+	ft_stringaddc(output, (mode & (1 << (9 - 8))) ? 'w' : '-');
+	if (mode & (1 << (9 - 3)))
+		ft_stringaddc(output, (mode & (1 << (12 - 3))) ? 't' : 'x');
+	else
+		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'T' : '-');
+}
+
 static void		ls_file(t_string *out, char *name, t_file *file, t_args *args)
 {
+	if (FLAG(FLAG_L))
+	{
+		get_modes(out, file->stats->st_mode);
+		ft_stringadd(out, " 0 ");
+		ft_stringadd(out, getpwuid(file->stats->st_uid)->pw_name);
+		ft_stringaddc(out, ' ');
+		ft_stringadd(out, getgrgid(file->stats->st_gid)->gr_name);
+		ft_stringaddc(out, ' ');
+	}
 	ft_stringadd(out, name);
-	ft_stringaddc(out, '\n');
-	(void)args;
-	(void)file;
+	if (FLAG(FLAG_1))
+		ft_stringaddc(out, '\n');
+	else
+		ft_stringadd(out, "		");
 }
 
 void			ls_files(t_string *output, t_array *files, t_args *args)
