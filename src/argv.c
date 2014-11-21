@@ -17,9 +17,9 @@ static void		inflate_flags(int **flags)
 	int				len;
 	const int		tmp[] = {
 
-	'a', FLAG_A, 'A', FLAG_AA, 'f', FLAG_F, 'l', FLAG_L,
-	'1', FLAG_1, 'r', FLAG_R,
-	'u', FLAG_U, 'U', FLAG_UU, 't', FLAG_T,
+	'a', FLAG_A, 'A', FLAG_AA, 'f', FLAG_F, '1', FLAG_1, 'r', FLAG_R,
+	'l', FLAG_L,
+	'u', FLAG_U, 'U', FLAG_UU, 't', FLAG_T, 'g', FLAG_G,
 	'R', FLAG_RR, 'd', FLAG_D,
 	0};
 	len = 23;
@@ -67,7 +67,7 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 			ft_putstr_fd(args->program, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
-			ft_putstr_fd("\nusage: ft_ls [-AURadftulr1] [file ...]\n", 2);
+			ft_putstr_fd("\nusage: ft_ls [-ARUadfglrtu1] [file ...]\n", 2);
 			exit(2);
 		}
 	}

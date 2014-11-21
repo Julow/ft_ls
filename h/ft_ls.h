@@ -18,6 +18,7 @@
 # include <dirent.h>
 # include <sys/ioctl.h>
 # include <sys/stat.h>
+# include <time.h>
 # include <pwd.h>
 # include <grp.h>
 # include <errno.h>
@@ -33,10 +34,11 @@
 # define FLAG_1 	(1 << 4)
 # define FLAG_RR 	(1 << 5)
 # define FLAG_R 	(1 << 6)
-# define FLAG_T 	(1 << 7 | FLAG_SORT)
+# define FLAG_T 	((1 << 7) | FLAG_SORT)
 # define FLAG_F		((1 << 8) | FLAG_A)
 # define FLAG_U		((1 << 9) | FLAG_SORT)
 # define FLAG_UU	((1 << 10) | FLAG_SORT)
+# define FLAG_G		(1 << 11)
 
 typedef struct	s_map
 {
@@ -59,26 +61,48 @@ typedef struct	s_argv
 	int				flags;
 }				t_args;
 
+/*
+** map.c
+*/
 t_map			*ft_mapnew(char *key, void *value);
 t_map			*ft_mapget(t_array *array, char *key);
 int				ft_mapchr(t_array *array, char *key);
 t_map			*ft_maprem(t_array *array, char *key);
 
+/*
+** ls_files.c
+*/
 void			ls_files(t_string *output, t_array *files, t_args *args);
+
+/*
+** ls_files.c
+*/
 void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f);
 
-void			*filenew(char *name, char *path, DIR *dir);
+/*
+** main.c
+*/
 void			ls(t_string *output, t_args *args);
 
-t_args			*get_args(int argc, char **argv);
 /*
-void			colum_add(t_string *output, t_array *array);
+** argv.c
 */
+t_args			*get_args(int argc, char **argv);
+
+/*
+** utils.c
+*/
+void			get_time(t_string *out, time_t m_time);
+void			*filenew(char *name, char *path, DIR *dir);
+t_bool			ft_stringaddcn(t_string *str, char c, int n);
+
+/*
+** sort.c
+*/
+void			ft_arrayswap(t_array *array, int i1, int i2);
+void			ft_arrayrev(t_array *array);
 void			ft_mapsort(t_array *array);
 void			filesort(t_array *files, t_args *args);
 void			dirsort(t_array *dirs, t_args *args);
-
-void			ft_arrayswap(t_array *array, int i1, int i2);
-void			ft_arrayrev(t_array *array);
 
 #endif

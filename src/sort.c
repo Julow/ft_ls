@@ -32,35 +32,6 @@ void			ft_arrayrev(t_array *array)
 		ft_arrayswap(array, i, array->length - i - 1);
 }
 
-void			ft_mapsort(t_array *array)
-{
-	int				i;
-	int				j;
-	int				small;
-	int				small_i;
-	int				diff;
-
-	i = -1;
-	while (++i < array->length)
-	{
-		small = 0;
-		small_i = i;
-		j = i;
-		while (++j < array->length)
-		{
-			diff = ft_strcmp(((t_map*)(array->data[j]))->key->content,
-				((t_map*)(array->data[i]))->key->content);
-			if (diff < small)
-			{
-				small_i = j;
-				small = diff;
-			}
-		}
-		if (small_i > i)
-			ft_arrayswap(array, small_i, i);
-	}
-}
-
 static time_t	get_value(void *data, t_args *args)
 {
 	struct stat		*tmp;
@@ -78,26 +49,34 @@ void			filesort(t_array *files, t_args *args)
 {
 	int				i;
 	int				j;
-	time_t			small;
-	int				small_i;
-	time_t			tmp;
 
 	i = -1;
 	while (++i < files->length)
 	{
-		small = get_value(((t_map*)files->data[i])->value, args);
-		small_i = i;
 		j = i;
 		while (++j < files->length)
 		{
-			tmp = get_value(((t_map*)files->data[j])->value, args);
-			if (tmp < small)
-			{
-				small = tmp;
-				small_i = j;
-			}
+			if (get_value(((t_map*)files->data[j])->value, args) <
+				get_value(((t_map*)files->data[i])->value, args))
+				ft_arrayswap(files, i, j);
 		}
-		if (small_i != i)
-			ft_arrayswap(files, small_i, i);
+	}
+}
+
+void			ft_mapsort(t_array *array)
+{
+	int				i;
+	int				j;
+
+	i = -1;
+	while (++i < array->length)
+	{
+		j = i;
+		while (++j < array->length)
+		{
+			if (ft_strcmp(((t_map*)array->data[i])->key->content,
+				((t_map*)array->data[j])->key->content) > 0)
+				ft_arrayswap(array, i, j);
+		}
 	}
 }
