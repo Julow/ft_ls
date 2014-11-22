@@ -20,7 +20,7 @@ t_map			*ft_mapnew(char *key, void *value)
 	map->key = ft_stringnew();
 	if (!ft_stringadd(map->key, key))
 	{
-		ft_stringkil(&(map->key));
+		ft_stringkil(map->key);
 		free(map);
 		return (NULL);
 	}

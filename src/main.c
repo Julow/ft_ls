@@ -29,7 +29,7 @@ static void		ls_errs(t_string *output, t_array *errs, t_args *args)
 		ft_stringadd(output, (char*)tmp->value);
 		ft_stringaddc(output, '\n');
 	}
-	ft_arraykil(&errs, &kill_err);
+	ft_arraykil(errs, &kill_err);
 }
 
 void			ls(t_string *output, t_args *args)
@@ -58,7 +58,7 @@ void			ls(t_string *output, t_args *args)
 	ls_errs(output, errs, args);
 	ls_files(output, files, args);
 	ls_dirs(output, dirs, args, files->length);
-	ft_arraykil(&files, &kill_file);
+	ft_arraykil(files, &kill_file);
 }
 
 int				main(int argc, char **argv)
@@ -70,7 +70,7 @@ int				main(int argc, char **argv)
 	output = ft_stringnew();
 	ls(output, args);
 	ft_stringput(output);
-	ft_stringkil(&output);
+	ft_stringkil(output);
 	kill_args(args);
 	while (1)
 		;

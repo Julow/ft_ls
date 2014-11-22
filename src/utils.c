@@ -54,7 +54,7 @@ void			*filenew(char *name, char *path, DIR *dir)
 		ft_stringputfd(file->path, 2);
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(strerror(errno), 2);
-		ft_stringkil(&(file->path));
+		ft_stringkil(file->path);
 		free(file);
 		return (NULL);
 	}

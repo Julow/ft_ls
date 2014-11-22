@@ -38,7 +38,7 @@ static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 		ft_stringaddc(output, '\n');
 	}
 	ls_files(output, files, args);
-	ft_arraykil(&files, &kill_file);
+	ft_arraykil(files, &kill_file);
 }
 
 void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
@@ -65,5 +65,5 @@ void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
 		}
 		ls_dir(output, tmp, args);
 	}
-	ft_arraykil(&dirs, &kill_file);
+	ft_arraykil(dirs, &kill_file);
 }
