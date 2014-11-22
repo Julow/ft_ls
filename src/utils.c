@@ -14,24 +14,23 @@
 
 void			get_time(t_string *out, time_t m_time)
 {
-	char			*tmp;
 	time_t			now;
 	time_t const	timeout = 6 * 30 * 24 * 60 * 60;
-	int				i;
+	char			**split;
 
-	tmp = ctime(&m_time);
+	split = ft_strsplit(ctime(&m_time), ' ');
 	time(&now);
-	i = 16;
+	ft_stringadd(out, split[2]);
+	ft_stringaddc(out, ' ');
+	ft_strlower(split[1]);
+	ft_stringadd(out, split[1]);
+	ft_stringaddc(out, ' ');
+	split[3][5] = '\0';
 	if (m_time <= now - timeout || m_time >= now + timeout)
-	{
-		while (tmp[i - 1] != ' ')
-		{
-			tmp[i] = tmp[i + 4];
-			i++;
-		}
-	}
-	tmp[i] = '\0';
-	ft_stringadd(out, tmp + 4);
+		ft_stringadd(out, split[4]);
+	else
+		ft_stringadd(out, split[3]);
+	free(split);
 }
 
 void			*filenew(char *name, char *path, DIR *dir)
@@ -61,15 +60,4 @@ void			*filenew(char *name, char *path, DIR *dir)
 	}
 	file->stats = stats;
 	return ((void*)file);
-}
-
-t_bool			ft_stringaddcn(t_string *str, char c, int n)
-{
-	ft_stringext(str, n);
-	while (--n >= 0)
-	{
-		if (!ft_stringaddc(str, c))
-			return (FALSE);
-	}
-	return (TRUE);
 }

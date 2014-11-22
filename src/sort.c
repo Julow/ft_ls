@@ -12,26 +12,6 @@
 
 #include "ft_ls.h"
 
-void			ft_arrayswap(t_array *array, int i1, int i2)
-{
-	void			*tmp;
-
-	tmp = array->data[i1];
-	array->data[i1] = array->data[i2];
-	array->data[i2] = tmp;
-}
-
-void			ft_arrayrev(t_array *array)
-{
-	int				i;
-	int				middle;
-
-	middle = array->length / 2;
-	i = -1;
-	while (++i < middle)
-		ft_arrayswap(array, i, array->length - i - 1);
-}
-
 static time_t	get_value(void *data, t_args *args)
 {
 	struct stat		*tmp;
@@ -56,7 +36,7 @@ void			filesort(t_array *files, t_args *args)
 		j = i;
 		while (++j < files->length)
 		{
-			if (get_value(((t_map*)files->data[j])->value, args) <
+			if (get_value(((t_map*)files->data[j])->value, args) >
 				get_value(((t_map*)files->data[i])->value, args))
 				ft_arrayswap(files, i, j);
 		}

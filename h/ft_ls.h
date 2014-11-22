@@ -62,6 +62,12 @@ typedef struct	s_argv
 }				t_args;
 
 /*
+** kill.c
+*/
+void			kill_err(void *err);
+void			kill_file(void *file);
+
+/*
 ** map.c
 */
 t_map			*ft_mapnew(char *key, void *value);
@@ -87,6 +93,7 @@ void			ls(t_string *output, t_args *args);
 /*
 ** argv.c
 */
+void			kill_args(t_args *args);
 t_args			*get_args(int argc, char **argv);
 
 /*
@@ -94,13 +101,10 @@ t_args			*get_args(int argc, char **argv);
 */
 void			get_time(t_string *out, time_t m_time);
 void			*filenew(char *name, char *path, DIR *dir);
-t_bool			ft_stringaddcn(t_string *str, char c, int n);
 
 /*
 ** sort.c
 */
-void			ft_arrayswap(t_array *array, int i1, int i2);
-void			ft_arrayrev(t_array *array);
 void			ft_mapsort(t_array *array);
 void			filesort(t_array *files, t_args *args);
 void			dirsort(t_array *dirs, t_args *args);
