@@ -47,9 +47,9 @@ void			ls(t_string *output, t_args *args)
 	while (++i < args->args_count)
 	{
 		dir = opendir(args->args[i]);
-		if (dir == NULL && errno == 20)
-			ft_arrayadd(files, ft_mapnew(args->args[i],
-				filenew(args->args[i], "", NULL)));
+		if (FLAG(FLAG_D) || (dir == NULL && errno == 20))
+			ft_arrayadd(files, ft_mapnew(args->args[i], filenew(args->args[i],
+				"", NULL)));
 		else
 			ft_arrayadd(((dir == NULL) ? errs : dirs), ft_mapnew(args->args[i],
 				(dir == NULL) ? strerror(errno) : filenew(args->args[i], "",
@@ -72,7 +72,5 @@ int				main(int argc, char **argv)
 	ft_stringput(output);
 	ft_stringkil(output);
 	kill_args(args);
-	while (1)
-		;
 	return (0);
 }

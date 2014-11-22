@@ -17,6 +17,7 @@ void			get_time(t_string *out, time_t m_time)
 	time_t			now;
 	time_t const	timeout = 6 * 30 * 24 * 60 * 60;
 	char			**split;
+	int				i;
 
 	split = ft_strsplit(ctime(&m_time), ' ');
 	time(&now);
@@ -30,6 +31,9 @@ void			get_time(t_string *out, time_t m_time)
 		ft_stringadd(out, split[4]);
 	else
 		ft_stringadd(out, split[3]);
+	i = -1;
+	while (split[++i] != NULL)
+		free(split[i]);
 	free(split);
 }
 
@@ -42,7 +46,8 @@ void			*filenew(char *name, char *path, DIR *dir)
 	file = MAL1(t_file);
 	file->path = ft_stringnew();
 	ft_stringadd(file->path, path);
-	while (file->path->content[file->path->length - 1] == '/')
+	while (file->path->length > 1 &&
+		file->path->content[file->path->length - 1] == '/')
 		ft_stringrem(file->path, file->path->length - 1, 1);
 	if (file->path->length > 0)
 		ft_stringaddc(file->path, '/');

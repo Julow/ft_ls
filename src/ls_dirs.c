@@ -17,7 +17,7 @@ static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 	t_array			*files;
 	int				total;
 	struct dirent	*ent;
-	t_file			*tmp;
+	t_map			*tmp;
 
 	total = 0;
 	files = ft_arraynew();
@@ -27,9 +27,12 @@ static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 			|| ft_strequ(ent->d_name, ".."))) || (!FLAG(FLAG_AA)
 			&& (ent->d_name[0] == '.')))
 			continue;
-		tmp = filenew(ent->d_name, ((t_file*)dir->value)->path->content, NULL);
-		total += tmp->stats->st_blocks;
-		ft_arrayadd(files, ft_mapnew(ent->d_name, tmp));
+		tmp = ft_mapnew(ent->d_name, filenew(ent->d_name,
+			((t_file*)dir->value)->path->content, NULL));
+		total += ((t_file*)tmp->value)->stats->st_blocks;
+		ft_arrayadd(files, tmp);
+		if (FLAG(FLAG_RR) && ent->d_type == DT_DIR)
+			ls_dir(output, tmp, args);
 	}
 	if (FLAG(FLAG_L))
 	{
@@ -58,7 +61,7 @@ void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
 		tmp = (t_map*)dirs->data[i];
 		if (args->args_count > 1)
 		{
-			if (i > 0 && f > 1)
+			if (i > 0 || f > 0)
 				ft_stringaddc(output, '\n');
 			ft_stringaddl(output, tmp->key->content, tmp->key->length);
 			ft_stringadd(output, ":\n");

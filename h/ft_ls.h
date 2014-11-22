@@ -40,6 +40,8 @@
 # define FLAG_UU	((1 << 10) | FLAG_SORT)
 # define FLAG_G		(1 << 11)
 
+typedef struct timespec		t_time;
+
 typedef struct	s_map
 {
 	t_string		*key;
