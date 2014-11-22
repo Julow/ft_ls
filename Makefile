@@ -18,6 +18,7 @@ O_DIR = o/
 LIBFT = libft/
 
 FLAGS = -Wall -Wextra -Werror -O2
+DEBUG = 0
 
 C_FILES = $(shell ls -1 $(C_DIR) | grep "\.c")
 
@@ -29,9 +30,9 @@ $(NAME): libs $(O_FILES)
 	@gcc $(FLAGS) -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && printf "\033[0;32m%-24s\033[1;30m<<--\033[0;0m\n" "$@" || printf "\033[0;31m%-24s\033[1;30m<<--\033[0;0m\n" "$@"
 
 libs:
-	@(make -C $(LIBFT) || (echo "\033[0;31m$@\033[0;0m" && exit 1)) | grep -v "Nothing to be done" || echo "" > /dev/null
+	@(if [ "$(DEBUG)" -eq "1" ]; then make -C $(LIBFT) debug; else make -C $(LIBFT); fi || (echo "\033[0;31m$(LIBFT)\033[0;0m" && exit 1)) | grep -v "Nothing to be done" || echo "" > /dev/null
 
-debug: _clean _debug all _clean
+debug: _debug all
 
 clean: _clean _libsclean
 
@@ -42,6 +43,8 @@ update: fclean
 
 re: fclean all
 
+rebug: fclean debug
+
 $(O_DIR)%.o: $(C_DIR)%.c
 	@mkdir $(O_DIR) 2> /dev/null || echo "" > /dev/null
 	@printf "\033[1;30m"
@@ -49,6 +52,7 @@ $(O_DIR)%.o: $(C_DIR)%.c
 
 _debug:
 	$(eval FLAGS = -Wall -Wextra -g)
+	$(eval DEBUG = 1)
 
 _clean:
 	@rm $(O_FILES) 2> /dev/null || echo "" > /dev/null
@@ -63,4 +67,4 @@ _libsclean:
 _libsfclean:
 	@make -C $(LIBFT) fclean
 
-.PHONY: all libs debug clean fclean update re _debug _clean _fclean _libsclean _libsfclean
+.PHONY: all libs debug clean fclean update re rebug _debug _clean _fclean _libsclean _libsfclean
