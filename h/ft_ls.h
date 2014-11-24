@@ -40,8 +40,11 @@
 # define FLAG_U		((1 << 9) | FLAG_SORT)
 # define FLAG_UU	((1 << 10) | FLAG_SORT)
 # define FLAG_G		(1 << 11)
+# define FLAG_FF	(1 << 12)
 
 typedef struct timespec		t_time;
+
+typedef struct stat			t_stat;
 
 typedef long long int		t_ulong;
 
@@ -122,7 +125,7 @@ t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
 t_string		*get_time(time_t m_time);
-t_string		*get_name(t_string *name, struct stat *s, t_args *args);
+t_string		*get_name(t_string *name, t_file *file, t_args *args);
 
 /*
 ** sort.c

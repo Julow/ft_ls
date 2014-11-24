@@ -64,7 +64,8 @@ static void		ls_file1(t_array *table, t_map *map, t_args *args)
 		((t_col*)table->data[j])->left = FALSE;
 		col_add((t_col*)table->data[++j], get_time(stats->st_mtimespec.tv_sec));
 	}
-	col_add((t_col*)table->data[++j], get_name(map->key, stats, args));
+	col_add((t_col*)table->data[++j], get_name(map->key, (t_file*)map->value,
+		args));
 }
 
 static void		ls_column(t_string *out, t_array *files, int len)

@@ -18,7 +18,7 @@ static void		inflate_flags(int **flags)
 	const int		tmp[] = {
 
 	'a', FLAG_A, 'A', FLAG_AA, 'f', FLAG_F, '1', FLAG_1, 'r', FLAG_R,
-	'l', FLAG_L, 't', FLAG_T,
+	'l', FLAG_L, 't', FLAG_T, 'F', FLAG_FF,
 	'u', FLAG_U, 'U', FLAG_UU, 'g', FLAG_G,
 	'R', FLAG_RR, 'd', FLAG_D,
 	0};
