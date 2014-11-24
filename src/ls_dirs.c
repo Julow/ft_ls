@@ -12,6 +12,13 @@
 
 #include "ft_ls.h"
 
+static void		write_total(t_string *output, int total)
+{
+	ft_stringadd(output, "total ");
+	ft_stringaddi(output, total);
+	ft_stringaddc(output, '\n');
+}
+
 static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 {
 	t_array			*files;
@@ -23,9 +30,8 @@ static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 	files = ft_arraynew();
 	while ((ent = readdir(((t_file*)dir->value)->dir)) != NULL)
 	{
-		if ((!FLAG(FLAG_A) && (ft_strequ(ent->d_name, ".")
-			|| ft_strequ(ent->d_name, ".."))) || (!FLAG(FLAG_AA)
-			&& (ent->d_name[0] == '.')))
+		if ((!FLAG(FLAG_AA) && (ent->d_name[0] == '.')) || (!FLAG(FLAG_A)
+			&& (ft_strequ(ent->d_name, ".") || ft_strequ(ent->d_name, ".."))))
 			continue;
 		tmp = ft_mapnew(ent->d_name, filenew(ent->d_name,
 			((t_file*)dir->value)->path->content, NULL));
@@ -35,11 +41,7 @@ static void		ls_dir(t_string *output, t_map *dir, t_args *args)
 			ls_dir(output, tmp, args);
 	}
 	if (FLAG(FLAG_L))
-	{
-		ft_stringadd(output, "total ");
-		ft_stringaddi(output, total);
-		ft_stringaddc(output, '\n');
-	}
+		write_total(output, total);
 	ls_files(output, files, args);
 	ft_arraykil(files, &kill_file);
 }

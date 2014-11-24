@@ -29,3 +29,12 @@ t_string		*ft_strings(char *str)
 	ft_stringadd(tmp, str);
 	return (tmp);
 }
+
+t_string		*ft_stringdup(t_string *str)
+{
+	t_string		*dup;
+
+	dup = ft_stringnew();
+	ft_stringaddl(dup, str->content, str->length);
+	return (dup);
+}

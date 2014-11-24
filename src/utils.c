@@ -40,32 +40,55 @@ t_string		*get_time(time_t m_time)
 	return (tmp);
 }
 
-void			*filenew(char *name, char *path, DIR *dir)
+char			get_special_mode(mode_t ifmt)
 {
-	t_file			*file;
-	struct stat		*stats;
+	if (ifmt == S_IFDIR || ifmt == S_IFSOCK)
+		return ((ifmt == S_IFDIR) ? 'd' : 's');
+	if (ifmt == S_IFCHR || ifmt == S_IFIFO)
+		return ((ifmt == S_IFCHR) ? 'c' : 'p');
+	if (ifmt == S_IFLNK || ifmt == S_IFBLK)
+		return ((ifmt == S_IFLNK) ? 'l' : 'b');
+	return ('-');
+}
 
-	stats = MAL1(struct stat);
-	file = MAL1(t_file);
-	file->path = ft_stringnew();
-	ft_stringadd(file->path, path);
-	while (file->path->length > 1 &&
-		file->path->content[file->path->length - 1] == '/')
-		ft_stringrem(file->path, file->path->length - 1, 1);
-	if (file->path->length > 0)
-		ft_stringaddc(file->path, '/');
-	ft_stringadd(file->path, name);
-	file->dir = dir;
-	if (stat(file->path->content, stats) < 0)
+t_string		*get_minor(struct stat *s)
+{
+	t_string		*str;
+
+	str = ft_stringnew();
+	if ((s->st_mode & S_IFMT) == S_IFCHR || (s->st_mode & S_IFMT) == S_IFBLK)
 	{
-		ft_putstr_fd("ft_ls: ", 2);
-		ft_stringputfd(file->path, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		ft_stringkil(file->path);
-		free(file);
-		return (NULL);
+		ft_stringaddi(str, 0);
+		ft_stringaddc(str, ',');
 	}
-	file->stats = stats;
-	return ((void*)file);
+	return (str);
+}
+
+t_string		*get_major(struct stat *s)
+{
+	t_string		*str;
+
+	str = ft_stringnew();
+	if ((s->st_mode & S_IFMT) == S_IFCHR || (s->st_mode & S_IFMT) == S_IFBLK)
+		ft_stringaddi(str, 0);
+	else
+		ft_stringaddi(str, s->st_size);
+	return (str);
+}
+
+t_string		*get_name(t_string *name, struct stat *s, t_args *args)
+{
+	t_string		*str;
+	char			tmp[1024];
+	int				length;
+
+	str = ft_stringnew();
+	ft_stringaddl(str, name->content, name->length);
+	if (FLAG(FLAG_L) && (s->st_mode & S_IFMT) == S_IFLNK)
+	{
+		ft_stringadd(str, " -> ");
+		length = readlink(name->content, tmp, 1024);
+		ft_stringaddl(str, tmp, length);
+	}
+	return (str);
 }

@@ -12,24 +12,34 @@
 
 #include "ft_ls.h"
 
-static void		ls_errs(t_string *output, t_array *errs, t_args *args)
+void			*filenew(char *name, char *path, DIR *dir)
 {
-	int				i;
-	t_map			*tmp;
+	t_file			*file;
+	struct stat		*stats;
 
-	if (!FLAG(FLAG_F))
-		ft_mapsort(errs);
-	i = -1;
-	while (++i < errs->length)
+	stats = MAL1(struct stat);
+	file = MAL1(t_file);
+	file->path = ft_stringnew();
+	ft_stringadd(file->path, path);
+	while (file->path->length > 1 &&
+		file->path->content[file->path->length - 1] == '/')
+		ft_stringrem(file->path, file->path->length - 1, 1);
+	if (file->path->length > 0)
+		ft_stringaddc(file->path, '/');
+	ft_stringadd(file->path, name);
+	file->dir = dir;
+	if (lstat(file->path->content, stats) < 0)
 	{
-		tmp = (t_map*)errs->data[i];
-		ft_stringadd(output, "ft_ls: ");
-		ft_stringaddl(output, tmp->key->content, tmp->key->length);
-		ft_stringadd(output, ": ");
-		ft_stringadd(output, (char*)tmp->value);
-		ft_stringaddc(output, '\n');
+		ft_putstr_fd("ft_ls: ", 2);
+		ft_stringputfd(file->path, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		ft_stringkil(file->path);
+		free(file);
+		return (NULL);
 	}
-	ft_arraykil(errs, &kill_err);
+	file->stats = stats;
+	return ((void*)file);
 }
 
 void			ls(t_string *output, t_args *args)

@@ -12,17 +12,6 @@
 
 #include "ft_ls.h"
 
-static char		get_special_mode(mode_t ifmt)
-{
-	if (ifmt == S_IFDIR || ifmt == S_IFSOCK)
-		return ((ifmt == S_IFDIR) ? 'd' : 's');
-	if (ifmt == S_IFCHR || ifmt == S_IFIFO)
-		return ((ifmt == S_IFCHR) ? 'c' : 'p');
-	if (ifmt == S_IFLNK || ifmt == S_IFBLK)
-		return ((ifmt == S_IFLNK) ? 'l' : 'b');
-	return ('-');
-}
-
 static t_string	*get_modes(mode_t mode)
 {
 	t_string		*tmp;
@@ -53,27 +42,29 @@ static t_string	*get_modes(mode_t mode)
 static void		ls_file1(t_array *table, t_map *map, t_args *args)
 {
 	int				j;
-	t_string		*tmp;
+	struct stat		*stats;
 
-	j = 0;
+	j = -1;
+	stats = ((t_file*)map->value)->stats;
 	if (FLAG(FLAG_L))
 	{
-		col_add((t_col*)table[j++]->data,
-			get_modes(((t_file*)map->value)->stats->st_mode));
-		col_add((t_col*)table[j++]->data,
-			ft_stringi(((t_file*)map->value)->stats->st_nlink));
-		col_add((t_col*)table[j++]->data, ft_strings(
-			getpwuid(((t_file*)map->value)->stats->st_uid)->pw_name));
-		col_add((t_col*)table[j++]->data, ft_strings(
-			getgrgid(((t_file*)map->value)->stats->st_gid)->gr_name));
-		col_add((t_col*)table[j++]->data,
-			ft_stringi(((t_file*)map->value)->stats->st_size));
-		col_add((t_col*)table[j++]->data,
-			ft_stringi(((t_file*)map->value)->stats->st_size));
-		col_add((t_col*)table[j++]->data,
-			get_time(((t_file*)map->value)->stats->st_mtimespec.tv_sec));
+		col_add((t_col*)table->data[++j], get_modes(stats->st_mode));
+		((t_col*)table->data[j])->left = 2;
+		col_add((t_col*)table->data[++j], ft_stringi(stats->st_nlink));
+		((t_col*)table->data[j])->left = FALSE;
+		col_add((t_col*)table->data[++j],
+			ft_strings(getpwuid(stats->st_uid)->pw_name));
+		((t_col*)table->data[j])->left = 2;
+		col_add((t_col*)table->data[++j],
+			ft_strings(getgrgid(stats->st_gid)->gr_name));
+		((t_col*)table->data[j])->left = 2;
+		col_add((t_col*)table->data[++j], get_minor(stats));
+		((t_col*)table->data[j])->left = FALSE;
+		col_add((t_col*)table->data[++j], get_major(stats));
+		((t_col*)table->data[j])->left = FALSE;
+		col_add((t_col*)table->data[++j], get_time(stats->st_mtimespec.tv_sec));
 	}
-	col_add((t_col*)table[j++]->data, map->key);
+	col_add((t_col*)table->data[++j], get_name(map->key, stats, args));
 }
 
 static void		ls_column(t_string *out, t_array *files, int len)
@@ -103,6 +94,18 @@ static void		ls_column(t_string *out, t_array *files, int len)
 	}
 }
 
+void			kill_file(void *file)
+{
+	t_file			*tmp;
+
+	tmp = (t_file*)((t_map*)file)->value;
+	ft_stringkil(((t_map*)file)->key);
+	free(tmp->stats);
+	ft_stringkil(tmp->path);
+	free(tmp);
+	free(file);
+}
+
 void			ls_files(t_string *out, t_array *files, t_args *args)
 {
 	int				i;
@@ -115,7 +118,7 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 		ft_mapsort(files);
 	if (FLAG(FLAG_R))
 		ft_arrayrev(files);
-	table = init_table(6);
+	table = init_table(8);
 	i = -1;
 	max_len = 8;
 	while (++i < files->length)

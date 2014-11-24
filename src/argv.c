@@ -28,23 +28,23 @@ static void		inflate_flags(int **flags)
 		(*flags)[len] = tmp[len];
 }
 
-static void		add_arg(t_args *args, char *add)
+static void		add_arg(t_args *targs, char *add)
 {
 	char			**tmp;
 	int				i;
 
-	tmp = args->args;
-	args->args = MAL(char*, ft_tablen((void**)tmp) + 2);
+	tmp = targs->args;
+	targs->args = MAL(char*, targs->args_count + 2);
 	i = 0;
 	while (tmp[i] != NULL)
 	{
-		args->args[i] = tmp[i];
+		targs->args[i] = tmp[i];
 		i++;
 	}
 	free(tmp);
-	args->args[i] = ft_strdup(add);
-	args->args[i + 1] = NULL;
-	args->args_count++;
+	targs->args[i] = ft_strdup(add);
+	targs->args[i + 1] = NULL;
+	targs->args_count++;
 }
 
 static void		read_flags(t_args *args, char *str, int const *flags)
@@ -109,7 +109,7 @@ t_args			*get_args(int argc, char **argv)
 	free(flags);
 	while (--argc > 0 && argv++)
 		add_arg(args, *argv);
-	if (ft_tablen((void**)args->args) == 0)
+	if (args->args_count == 0)
 		add_arg(args, ".");
 	return (args);
 }

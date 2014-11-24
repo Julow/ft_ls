@@ -12,18 +12,28 @@
 
 #include "ft_ls.h"
 
-t_col			*col_new()
+static int		get_line_count(t_array *table)
 {
-	t_col			*col;
+	int				i;
+	int				lines;
 
-	col = MAL1(t_col);
-	col->max_len = 0;
-	col->left = TRUE;
-	col->lines = ft_arraynew();
-	return (col);
+	lines = 0;
+	i = -1;
+	while (++i < table->length)
+	{
+		if (((t_col*)table->data[i])->lines->length > lines)
+			lines = ((t_col*)table->data[i])->lines->length;
+	}
+	return (lines);
 }
 
-void			coll_add(t_col *col, t_string *str)
+void			kill_col(void *col)
+{
+	ft_arraykil(((t_col*)col)->lines, &ft_stringkil);
+	free(col);
+}
+
+void			col_add(t_col *col, t_string *str)
 {
 	ft_arrayadd(col->lines, str);
 	if (str->length > col->max_length)
@@ -33,38 +43,47 @@ void			coll_add(t_col *col, t_string *str)
 t_array			*init_table(int length)
 {
 	t_array			*table;
+	t_col			*tmp;
 
 	table = ft_arraynew();
 	while (length-- > 0)
-		ft_arrayadd(table, col_new());
+	{
+		tmp = MAL1(t_col);
+		tmp->max_length = 0;
+		tmp->left = TRUE;
+		tmp->lines = ft_arraynew();
+		ft_arrayadd(table, tmp);
+	}
 	return (table);
 }
 
 void			print_table(t_string *out, t_array *table)
 {
+	int const		length = get_line_count(table);
 	int				i;
 	int				j;
-	int				changes;
 	t_col			*col;
 	t_string		*tmp;
 
-	changes = 1;
 	i = -1;
-	while (++i >= 0)
+	while (++i < length)
 	{
-		changes = 0;
 		j = -1;
 		while (++j < table->length)
 		{
-			col = (t_col*)(t_col*)table->data[j];
-			if (col->lines->length <= i && ++changes >= 0)
-				break ;
+			if ((col = (t_col*)table->data[j])->lines->length <= i
+				|| col->max_length <= 0)
+				continue;
 			tmp = (t_string*)col->lines->data[i];
-			if (tmp->left)
-				ft_stringaddcn(out, ' ', col->max_length - tmp->length + 1);
+			if (!col->left)
+				ft_stringaddcn(out, ' ', col->max_length - tmp->length +
+					((col->left == 2) ? 1 : 0));
 			ft_stringaddl(out, tmp->content, tmp->length);
-			if (!tmp->left && j + 1 < table->length)
-				ft_stringaddcn(out, ' ', col->max_length - tmp->length + 1);
+			if (col->left && j + 1 < table->length)
+				ft_stringaddcn(out, ' ', col->max_length - tmp->length +
+					((col->left == 2) ? 1 : 0));
+			ft_stringaddc(out, ' ');
 		}
+		ft_stringaddc(out, '\n');
 	}
 }
