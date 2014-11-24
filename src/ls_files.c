@@ -23,48 +23,57 @@ static char		get_special_mode(mode_t ifmt)
 	return ('-');
 }
 
-static void		get_modes(t_string *output, mode_t mode)
+static t_string	*get_modes(mode_t mode)
 {
-	ft_stringaddc(output, get_special_mode(mode & S_IFMT));
-	ft_stringaddc(output, (mode & (1 << (9 - 1))) ? 'r' : '-');
-	ft_stringaddc(output, (mode & (1 << (9 - 2))) ? 'w' : '-');
+	t_string		*tmp;
+
+	tmp = ft_stringnew();
+	ft_stringaddc(tmp, get_special_mode(mode & S_IFMT));
+	ft_stringaddc(tmp, (mode & (1 << (9 - 1))) ? 'r' : '-');
+	ft_stringaddc(tmp, (mode & (1 << (9 - 2))) ? 'w' : '-');
 	if (mode & (1 << (9 - 3)))
-		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 's' : 'x');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 's' : 'x');
 	else
-		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'S' : '-');
-	ft_stringaddc(output, (mode & (1 << (9 - 4))) ? 'r' : '-');
-	ft_stringaddc(output, (mode & (1 << (9 - 5))) ? 'w' : '-');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'S' : '-');
+	ft_stringaddc(tmp, (mode & (1 << (9 - 4))) ? 'r' : '-');
+	ft_stringaddc(tmp, (mode & (1 << (9 - 5))) ? 'w' : '-');
 	if (mode & (1 << (9 - 3)))
-		ft_stringaddc(output, (mode & (1 << (12 - 2))) ? 's' : 'x');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 2))) ? 's' : 'x');
 	else
-		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'S' : '-');
-	ft_stringaddc(output, (mode & (1 << (9 - 7))) ? 'r' : '-');
-	ft_stringaddc(output, (mode & (1 << (9 - 8))) ? 'w' : '-');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'S' : '-');
+	ft_stringaddc(tmp, (mode & (1 << (9 - 7))) ? 'r' : '-');
+	ft_stringaddc(tmp, (mode & (1 << (9 - 8))) ? 'w' : '-');
 	if (mode & (1 << (9 - 3)))
-		ft_stringaddc(output, (mode & (1 << (12 - 3))) ? 't' : 'x');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 3))) ? 't' : 'x');
 	else
-		ft_stringaddc(output, (mode & (1 << (12 - 1))) ? 'T' : '-');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'T' : '-');
+	return (tmp);
 }
 
-static void		ls_file1(t_string *out, t_string *n, t_file *f, t_args *args)
+static void		ls_file1(t_array *table, t_map *map, t_args *args)
 {
+	int				j;
+	t_string		*tmp;
+
+	j = 0;
 	if (FLAG(FLAG_L))
 	{
-		get_modes(out, f->stats->st_mode);
-		ft_stringadd(out, "  ");
-		ft_stringaddi(out, f->stats->st_nlink);
-		ft_stringaddc(out, ' ');
-		ft_stringadd(out, getpwuid(f->stats->st_uid)->pw_name);
-		ft_stringadd(out, "  ");
-		ft_stringadd(out, getgrgid(f->stats->st_gid)->gr_name);
-		ft_stringadd(out, "  ");
-		ft_stringaddi(out, f->stats->st_size);
-		ft_stringaddc(out, ' ');
-		get_time(out, f->stats->st_mtimespec.tv_sec);
-		ft_stringaddc(out, ' ');
+		col_add((t_col*)table[j++]->data,
+			get_modes(((t_file*)map->value)->stats->st_mode));
+		col_add((t_col*)table[j++]->data,
+			ft_stringi(((t_file*)map->value)->stats->st_nlink));
+		col_add((t_col*)table[j++]->data, ft_strings(
+			getpwuid(((t_file*)map->value)->stats->st_uid)->pw_name));
+		col_add((t_col*)table[j++]->data, ft_strings(
+			getgrgid(((t_file*)map->value)->stats->st_gid)->gr_name));
+		col_add((t_col*)table[j++]->data,
+			ft_stringi(((t_file*)map->value)->stats->st_size));
+		col_add((t_col*)table[j++]->data,
+			ft_stringi(((t_file*)map->value)->stats->st_size));
+		col_add((t_col*)table[j++]->data,
+			get_time(((t_file*)map->value)->stats->st_mtimespec.tv_sec));
 	}
-	ft_stringaddl(out, n->content, n->length);
-	ft_stringaddc(out, '\n');
+	col_add((t_col*)table[j++]->data, map->key);
 }
 
 static void		ls_column(t_string *out, t_array *files, int len)
@@ -98,7 +107,7 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 {
 	int				i;
 	int				max_len;
-	t_string		*tmp;
+	t_array			*table;
 
 	if (FLAG(FLAG_SORT))
 		filesort(files, args);
@@ -106,16 +115,19 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 		ft_mapsort(files);
 	if (FLAG(FLAG_R))
 		ft_arrayrev(files);
+	table = init_table(6);
 	i = -1;
 	max_len = 8;
 	while (++i < files->length)
 	{
-		tmp = ((t_map*)files->data[i])->key;
 		if (FLAG(FLAG_1))
-			ls_file1(out, tmp, (t_file*)((t_map*)files->data[i])->value, args);
-		while (tmp->length >= max_len)
+			ls_file1(table, (t_map*)files->data[i], args);
+		while (((t_map*)files->data[i])->key->length >= max_len)
 			max_len += 8;
 	}
 	if (!FLAG(FLAG_1))
 		ls_column(out, files, max_len);
+	else
+		print_table(out, table);
+	ft_arraykil(table, kill_col);
 }

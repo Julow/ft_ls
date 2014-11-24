@@ -42,11 +42,20 @@
 
 typedef struct timespec		t_time;
 
+typedef long long int		t_ulong;
+
 typedef struct	s_map
 {
 	t_string		*key;
 	void			*value;
 }				t_map;
+
+typedef struct	s_col
+{
+	int				max_length;
+	t_bool			left;
+	t_array			*lines;
+}				t_col;
 
 typedef struct	s_file
 {
@@ -68,6 +77,7 @@ typedef struct	s_argv
 */
 void			kill_err(void *err);
 void			kill_file(void *file);
+void			kill_col(void *col);
 
 /*
 ** map.c
@@ -101,7 +111,7 @@ t_args			*get_args(int argc, char **argv);
 /*
 ** utils.c
 */
-void			get_time(t_string *out, time_t m_time);
+t_string		*get_time(time_t m_time);
 void			*filenew(char *name, char *path, DIR *dir);
 
 /*
@@ -110,5 +120,12 @@ void			*filenew(char *name, char *path, DIR *dir);
 void			ft_mapsort(t_array *array);
 void			filesort(t_array *files, t_args *args);
 void			dirsort(t_array *dirs, t_args *args);
+
+/*
+** table.c
+*/
+t_col			*col_new();
+t_array			*init_table(int length);
+void			print_table(t_string *out, t_array *table);
 
 #endif

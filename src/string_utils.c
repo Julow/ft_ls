@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   kill.c                                             :+:      :+:    :+:   */
+/*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/22 18:42:54 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/22 18:42:55 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/11/24 13:53:29 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/11/24 13:53:30 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void			kill_err(void *err)
+t_string		*ft_stringi(int n)
 {
-	ft_stringkil(((t_map*)err)->key);
-	free(err);
+	t_string		*tmp;
+
+	tmp = ft_stringnew();
+	ft_stringaddi(tmp, n);
+	return (tmp);
 }
 
-void			kill_file(void *file)
+t_string		*ft_strings(char *str)
 {
-	t_file			*tmp;
+	t_string		*tmp;
 
-	tmp = (t_file*)((t_map*)file)->value;
-	ft_stringkil(((t_map*)file)->key);
-	free(tmp->stats);
-	ft_stringkil(tmp->path);
-	free(tmp);
-	free(file);
-}
-
-void			kill_col(void *col)
-{
-	ft_arraykil(((t_col*)col)->lines, &ft_stringkil);
-	free(col);
+	tmp = ft_stringnew();
+	ft_stringadd(tmp, str);
+	return (tmp);
 }

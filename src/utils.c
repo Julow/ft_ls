@@ -12,29 +12,32 @@
 
 #include "ft_ls.h"
 
-void			get_time(t_string *out, time_t m_time)
+t_string		*get_time(time_t m_time)
 {
 	time_t			now;
 	time_t const	timeout = 6 * 30 * 24 * 60 * 60;
 	char			**split;
 	int				i;
+	t_string		*tmp;
 
+	tmp = ft_stringnew();
 	split = ft_strsplit(ctime(&m_time), ' ');
 	time(&now);
-	ft_stringadd(out, split[2]);
-	ft_stringaddc(out, ' ');
+	ft_stringadd(tmp, split[2]);
+	ft_stringaddc(tmp, ' ');
 	ft_strlower(split[1]);
-	ft_stringadd(out, split[1]);
-	ft_stringaddc(out, ' ');
+	ft_stringadd(tmp, split[1]);
+	ft_stringaddc(tmp, ' ');
 	split[3][5] = '\0';
 	if (m_time <= now - timeout || m_time >= now + timeout)
-		ft_stringadd(out, split[4]);
+		ft_stringadd(tmp, split[4]);
 	else
-		ft_stringadd(out, split[3]);
+		ft_stringadd(tmp, split[3]);
 	i = -1;
 	while (split[++i] != NULL)
 		free(split[i]);
 	free(split);
+	return (tmp);
 }
 
 void			*filenew(char *name, char *path, DIR *dir)
