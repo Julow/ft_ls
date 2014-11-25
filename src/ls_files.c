@@ -58,9 +58,9 @@ static void		ls_file1(t_array *table, t_map *map, t_args *args)
 		col_add((t_col*)table->data[++j],
 			ft_strings(getgrgid(stats->st_gid)->gr_name));
 		((t_col*)table->data[j])->left = 2;
-		col_add((t_col*)table->data[++j], get_minor(stats));
-		((t_col*)table->data[j])->left = FALSE;
 		col_add((t_col*)table->data[++j], get_major(stats));
+		((t_col*)table->data[j])->left = -1;
+		col_add((t_col*)table->data[++j], get_minor(stats));
 		((t_col*)table->data[j])->left = FALSE;
 		col_add((t_col*)table->data[++j], get_time(stats->st_mtimespec.tv_sec));
 	}
@@ -68,14 +68,13 @@ static void		ls_file1(t_array *table, t_map *map, t_args *args)
 		args));
 }
 
-static void		ls_column(t_string *out, t_array *files, int len)
+static void		ls_column(t_string *out, t_array *files, int len, t_map *tmp)
 {
 	int				i;
 	int				j;
 	struct ttysize	ts;
 	int				columns;
 	int				lines;
-	t_map			*tmp;
 
 	ioctl(0, TIOCGSIZE, &ts);
 	i = -1;
@@ -130,7 +129,7 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 			max_len += 8;
 	}
 	if (!FLAG(FLAG_1))
-		ls_column(out, files, max_len);
+		ls_column(out, files, max_len, NULL);
 	else
 		print_table(out, table);
 	ft_arraykil(table, kill_col);

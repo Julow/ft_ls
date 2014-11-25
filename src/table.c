@@ -74,13 +74,12 @@ void			print_table(t_string *out, t_array *table)
 			if (col->lines->length <= i || col->max_length <= 0)
 				continue;
 			tmp = (t_string*)col->lines->data[i];
-			if (!col->left)
-				ft_stringaddcn(out, ' ', col->max_length - tmp->length +
-					((col->left == 2) ? 1 : 0));
+			if (col->left <= 0)
+				ft_stringaddcn(out, ' ', col->max_length - tmp->length);
 			ft_stringaddl(out, tmp->content, tmp->length);
 			if (col->left && j + 1 < table->length)
 				ft_stringaddcn(out, ' ', col->max_length - tmp->length);
-			ft_stringaddcn(out, ' ', (col->left == 2) ? 2 : 1);
+			ft_stringaddcn(out, ' ', (col->left) ? col->left : 1);
 		}
 		ft_stringaddc(out, '\n');
 	}

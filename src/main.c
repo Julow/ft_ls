@@ -15,10 +15,9 @@
 void			*filenew(char *name, char *path, DIR *dir)
 {
 	t_file			*file;
-	struct stat		*stats;
 
-	stats = MAL1(struct stat);
 	file = MAL1(t_file);
+	file->stats = MAL1(struct stat);
 	file->path = ft_stringnew();
 	ft_stringadd(file->path, path);
 	while (file->path->length > 1 &&
@@ -28,7 +27,7 @@ void			*filenew(char *name, char *path, DIR *dir)
 		ft_stringaddc(file->path, '/');
 	ft_stringadd(file->path, name);
 	file->dir = dir;
-	if (lstat(file->path->content, stats) < 0)
+	if (lstat(file->path->content, file->stats) < 0)
 	{
 		ft_putstr_fd("ft_ls: ", 2);
 		ft_stringputfd(file->path, 2);
@@ -38,7 +37,6 @@ void			*filenew(char *name, char *path, DIR *dir)
 		free(file);
 		return (NULL);
 	}
-	file->stats = stats;
 	return ((void*)file);
 }
 

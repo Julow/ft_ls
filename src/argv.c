@@ -99,7 +99,7 @@ t_args			*get_args(int argc, char **argv)
 	while (--argc > 0 && argv++)
 		if (ft_strequ(*argv, "--"))
 			break ;
-		else if (**argv == '-')
+		else if (**argv == '-' && *(*argv + 1) != '\0')
 			read_flags(args, *argv, flags);
 		else
 		{

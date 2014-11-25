@@ -23,10 +23,9 @@ t_string		*get_time(time_t m_time)
 	tmp = ft_stringnew();
 	split = ft_strsplit(ctime(&m_time), ' ');
 	time(&now);
-	ft_stringadd(tmp, split[2]);
-	ft_stringaddc(tmp, ' ');
-	ft_strlower(split[1]);
 	ft_stringadd(tmp, split[1]);
+	ft_stringaddc(tmp, ' ');
+	ft_stringadd(tmp, split[2]);
 	ft_stringaddc(tmp, ' ');
 	split[3][5] = '\0';
 	if (m_time <= now - timeout || m_time >= now + timeout)
@@ -51,26 +50,26 @@ char			get_special_mode(mode_t ifmt)
 	return ('-');
 }
 
-t_string		*get_minor(t_stat *s)
-{
-	t_string		*str;
-
-	str = ft_stringnew();
-	if ((s->st_mode & S_IFMT) == S_IFCHR || (s->st_mode & S_IFMT) == S_IFBLK)
-	{
-		ft_stringaddi(str, 0);
-		ft_stringaddc(str, ',');
-	}
-	return (str);
-}
-
 t_string		*get_major(t_stat *s)
 {
 	t_string		*str;
 
 	str = ft_stringnew();
 	if ((s->st_mode & S_IFMT) == S_IFCHR || (s->st_mode & S_IFMT) == S_IFBLK)
-		ft_stringaddi(str, 0);
+	{
+		ft_stringaddi(str, MAJOR(s->st_rdev));
+		ft_stringaddc(str, ',');
+	}
+	return (str);
+}
+
+t_string		*get_minor(t_stat *s)
+{
+	t_string		*str;
+
+	str = ft_stringnew();
+	if ((s->st_mode & S_IFMT) == S_IFCHR || (s->st_mode & S_IFMT) == S_IFBLK)
+		ft_stringaddi(str, MINOR(s->st_rdev));
 	else
 		ft_stringaddi(str, s->st_size);
 	return (str);

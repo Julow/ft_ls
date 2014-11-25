@@ -22,7 +22,6 @@ static t_time	get_value(void *data, t_args *args)
 	if (FLAG(FLAG_UU))
 		return (tmp->stats->st_birthtimespec);
 	return (tmp->stats->st_mtimespec);
-
 }
 
 void			filesort(t_array *files, t_args *args)

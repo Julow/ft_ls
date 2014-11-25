@@ -42,11 +42,12 @@
 # define FLAG_G		(1 << 11)
 # define FLAG_FF	(1 << 12)
 
+# define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
+# define MINOR(dev)	((int)((dev) & 0xFFFFFF))
+
 typedef struct timespec		t_time;
 
 typedef struct stat			t_stat;
-
-typedef long long int		t_ulong;
 
 typedef struct	s_map
 {
