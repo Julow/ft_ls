@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static t_string	*get_modes(mode_t mode)
+static t_string	*get_modes(char *n, mode_t mode)
 {
 	t_string		*tmp;
 
@@ -36,6 +36,7 @@ static t_string	*get_modes(mode_t mode)
 		ft_stringaddc(tmp, (mode & (1 << (12 - 3))) ? 't' : 'x');
 	else
 		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'T' : '-');
+	ft_stringaddc(tmp, (listxattr(n, NULL, 0, XATTR_NOFOLLOW) > 0) ? '@' : ' ');
 	return (tmp);
 }
 
@@ -48,8 +49,8 @@ static void		ls_file1(t_array *table, t_map *map, t_args *args)
 	stats = ((t_file*)map->value)->stats;
 	if (FLAG(FLAG_L))
 	{
-		col_add((t_col*)table->data[++j], get_modes(stats->st_mode));
-		((t_col*)table->data[j])->left = 2;
+		col_add((t_col*)table->data[++j], get_modes(
+			((t_file*)map->value)->path->content, stats->st_mode));
 		col_add((t_col*)table->data[++j], ft_stringi(stats->st_nlink));
 		((t_col*)table->data[j])->left = FALSE;
 		col_add((t_col*)table->data[++j],
@@ -61,7 +62,7 @@ static void		ls_file1(t_array *table, t_map *map, t_args *args)
 		col_add((t_col*)table->data[++j], get_major(stats));
 		((t_col*)table->data[j])->left = -1;
 		col_add((t_col*)table->data[++j], get_minor(stats));
-		((t_col*)table->data[j])->left = FALSE;
+		((t_col*)table->data[j])->left = 0;
 		col_add((t_col*)table->data[++j], get_time(stats->st_mtimespec.tv_sec));
 	}
 	col_add((t_col*)table->data[++j], get_name(map->key, (t_file*)map->value,
