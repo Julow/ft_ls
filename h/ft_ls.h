@@ -40,8 +40,9 @@
 # define FLAG_F		((1 << 8) | FLAG_A)
 # define FLAG_U		((1 << 9) | FLAG_SORT)
 # define FLAG_UU	((1 << 10) | FLAG_SORT)
-# define FLAG_G		(1 << 11)
+# define FLAG_G		(1 << 11 | FLAG_L)
 # define FLAG_FF	(1 << 12)
+# define FLAG_O		(1 << 14 | FLAG_L)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))

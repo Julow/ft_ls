@@ -42,30 +42,28 @@ static t_string	*get_modes(char *n, mode_t mode)
 
 static void		ls_file1(t_array *table, t_map *map, t_args *args)
 {
-	int				j;
 	struct stat		*stats;
 
-	j = -1;
 	stats = ((t_file*)map->value)->stats;
 	if (FLAG(FLAG_L))
 	{
-		col_add((t_col*)table->data[++j], get_modes(
+		col_add((t_col*)table->data[0], get_modes(
 			((t_file*)map->value)->path->content, stats->st_mode));
-		col_add((t_col*)table->data[++j], ft_stringi(stats->st_nlink));
-		((t_col*)table->data[j])->left = FALSE;
-		col_add((t_col*)table->data[++j],
-			ft_strings(getpwuid(stats->st_uid)->pw_name));
-		((t_col*)table->data[j])->left = 2;
-		col_add((t_col*)table->data[++j],
-			ft_strings(getgrgid(stats->st_gid)->gr_name));
-		((t_col*)table->data[j])->left = 2;
-		col_add((t_col*)table->data[++j], get_major(stats));
-		((t_col*)table->data[j])->left = -1;
-		col_add((t_col*)table->data[++j], get_minor(stats));
-		((t_col*)table->data[j])->left = 0;
-		col_add((t_col*)table->data[++j], get_time(stats->st_mtimespec.tv_sec));
+		col_add((t_col*)table->data[1], ft_stringi(stats->st_nlink));
+		((t_col*)table->data[1])->left = FALSE;
+		col_add((t_col*)table->data[2], ft_strings((FLAG(FLAG_G)) ? "" :
+			getpwuid(stats->st_uid)->pw_name));
+		((t_col*)table->data[2])->left = 2;
+		col_add((t_col*)table->data[3], ft_strings((FLAG(FLAG_O)) ? "" :
+			getgrgid(stats->st_gid)->gr_name));
+		((t_col*)table->data[3])->left = 2;
+		col_add((t_col*)table->data[4], get_major(stats));
+		((t_col*)table->data[4])->left = -1;
+		col_add((t_col*)table->data[5], get_minor(stats));
+		((t_col*)table->data[5])->left = FALSE;
+		col_add((t_col*)table->data[6], get_time(stats->st_mtimespec.tv_sec));
 	}
-	col_add((t_col*)table->data[++j], get_name(map->key, (t_file*)map->value,
+	col_add((t_col*)table->data[7], get_name(map->key, (t_file*)map->value,
 		args));
 }
 
@@ -77,7 +75,7 @@ static void		ls_column(t_string *out, t_array *files, int len, t_map *tmp)
 	int				columns;
 	int				lines;
 
-	ioctl(0, TIOCGSIZE, &ts);
+	ioctl(1, TIOCGSIZE, &ts);
 	i = -1;
 	columns = (ts.ts_cols > len && len > 0) ? ts.ts_cols / len : 1;
 	lines = files->length / columns + ((files->length % columns > 0) ? 1 : 0);
