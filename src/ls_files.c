@@ -26,16 +26,16 @@ static t_string	*get_modes(char *n, mode_t mode)
 		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'S' : '-');
 	ft_stringaddc(tmp, (mode & (1 << (9 - 4))) ? 'r' : '-');
 	ft_stringaddc(tmp, (mode & (1 << (9 - 5))) ? 'w' : '-');
-	if (mode & (1 << (9 - 3)))
+	if (mode & (1 << (9 - 6)))
 		ft_stringaddc(tmp, (mode & (1 << (12 - 2))) ? 's' : 'x');
 	else
-		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'S' : '-');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 2))) ? 'S' : '-');
 	ft_stringaddc(tmp, (mode & (1 << (9 - 7))) ? 'r' : '-');
 	ft_stringaddc(tmp, (mode & (1 << (9 - 8))) ? 'w' : '-');
-	if (mode & (1 << (9 - 3)))
+	if (mode & (1 << (9 - 9)))
 		ft_stringaddc(tmp, (mode & (1 << (12 - 3))) ? 't' : 'x');
 	else
-		ft_stringaddc(tmp, (mode & (1 << (12 - 1))) ? 'T' : '-');
+		ft_stringaddc(tmp, (mode & (1 << (12 - 3))) ? 'T' : '-');
 	ft_stringaddc(tmp, (listxattr(n, NULL, 0, XATTR_NOFOLLOW) > 0) ? '@' : ' ');
 	return (tmp);
 }
@@ -61,7 +61,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 		col_add((t_col*)table->data[6],
 			get_time(file->stats->st_mtimespec.tv_sec));
 	}
-	col_add((t_col*)table->data[7], get_name(file, args));
+	col_add((t_col*)table->data[7], ft_stringdup(file->name));
 }
 
 static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)

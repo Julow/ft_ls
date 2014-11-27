@@ -12,13 +12,12 @@
 
 #include "ft_ls.h"
 
-void			*filenew(char *name, char *path, DIR *dir)
+void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 {
 	t_file			*file;
 
 	file = MAL1(t_file);
 	file->stats = MAL1(struct stat);
-	file->name = ft_strings(name);
 	file->path = ft_stringnew();
 	ft_stringadd(file->path, path);
 	while (file->path->length > 1 &&
@@ -38,6 +37,7 @@ void			*filenew(char *name, char *path, DIR *dir)
 		free(file);
 		return (NULL);
 	}
+	file->name = get_name(file, name, args);
 	return ((void*)file);
 }
 
@@ -57,10 +57,10 @@ void			ls(t_string *output, t_args *args)
 	{
 		dir = opendir(args->args[i]);
 		if (FLAG(FLAG_D) || (dir == NULL && errno == 20))
-			ft_arrayadd(files, filenew(args->args[i], "", NULL));
+			ft_arrayadd(files, filenew(args->args[i], "", NULL, args));
 		else
 			ft_arrayadd(((dir == NULL) ? errs : dirs), (dir == NULL) ?
-				strerror(errno) : filenew(args->args[i], "", dir));
+				strerror(errno) : filenew(args->args[i], "", dir, args));
 	}
 	ls_errs(output, errs, args);
 	ls_files(output, files, args);

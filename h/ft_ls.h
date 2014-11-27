@@ -114,7 +114,7 @@ void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f);
 /*
 ** main.c
 */
-void			*filenew(char *name, char *path, DIR *dir);
+void			*filenew(char *name, char *path, DIR *dir, t_args *args);
 void			ls(t_string *output, t_args *args);
 
 /*
@@ -130,7 +130,7 @@ t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
 t_string		*get_time(time_t m_time);
-t_string		*get_name(t_file *file, t_args *args);
+t_string		*get_name(t_file *file, char *name, t_args *args);
 
 /*
 ** sort.c

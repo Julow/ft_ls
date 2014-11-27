@@ -77,7 +77,7 @@ t_string		*get_minor(t_stat *s)
 	return (str);
 }
 
-t_string		*get_name(t_file *file, t_args *args)
+t_string		*get_name(t_file *file, char *name, t_args *args)
 {
 	t_string		*str;
 	char			tmp[1024];
@@ -85,11 +85,16 @@ t_string		*get_name(t_file *file, t_args *args)
 	int const		mode = file->stats->st_mode & S_IFMT;
 
 	str = ft_stringnew();
-	ft_stringaddl(str, file->name->content, file->name->length);
-	if (FLAG(FLAG_FF) && mode == S_IFDIR)
-		ft_stringaddc(str, '/');
-	if (FLAG(FLAG_FF) && mode == S_IFLNK)
-		ft_stringaddc(str, '@');
+	ft_stringadd(str, name);
+	if (FLAG(FLAG_FF) && (mode == S_IFDIR || mode == S_IFLNK))
+		ft_stringaddc(str, (mode == S_IFDIR) ? '/' : '@');
+	else if (FLAG(FLAG_FF) && (mode == S_IFIFO || mode == S_IFSOCK))
+		ft_stringaddc(str, (mode == S_IFIFO) ? '|' : '=');
+	else if (FLAG(FLAG_FF) && mode == S_IFWHT)
+		ft_stringaddc(str, '%');
+	else if (FLAG(FLAG_FF) && (file->stats->st_mode & S_IXUSR ||
+		file->stats->st_mode & S_IXGRP || file->stats->st_mode & S_IXOTH))
+		ft_stringaddc(str, '*');
 	if (FLAG(FLAG_L) && mode == S_IFLNK)
 	{
 		ft_stringadd(str, " -> ");

@@ -33,7 +33,7 @@ static void		ls_dir(t_string *output, t_file *dir, t_args *args)
 		if ((!FLAG(FLAG_AA) && (ent->d_name[0] == '.')) || (!FLAG(FLAG_A)
 			&& (ft_strequ(ent->d_name, ".") || ft_strequ(ent->d_name, ".."))))
 			continue;
-		tmp = filenew(ent->d_name, dir->path->content, NULL);
+		tmp = filenew(ent->d_name, dir->path->content, NULL, args);
 		total += dir->stats->st_blocks;
 		ft_arrayadd(files, tmp);
 		if (FLAG(FLAG_RR) && ent->d_type == DT_DIR)
