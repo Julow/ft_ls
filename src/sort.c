@@ -24,7 +24,7 @@ static t_time	get_value(void *data, t_args *args)
 	return (tmp->stats->st_mtimespec);
 }
 
-void			filesort(t_array *files, t_args *args)
+void			filesort_t(t_array *files, t_args *args)
 {
 	int				i;
 	int				j;
@@ -48,20 +48,23 @@ void			filesort(t_array *files, t_args *args)
 	}
 }
 
-void			ft_mapsort(t_array *array)
+void			filesort(t_array *files)
 {
 	int				i;
 	int				j;
+	t_file			*tmpi;
+	t_file			*tmpj;
 
 	i = -1;
-	while (++i < array->length)
+	while (++i < files->length)
 	{
+		tmpi = (t_file*)files->data[i];
 		j = i;
-		while (++j < array->length)
+		while (++j < files->length)
 		{
-			if (ft_strcmp(((t_map*)array->data[i])->key->content,
-				((t_map*)array->data[j])->key->content) > 0)
-				ft_arrayswap(array, i, j);
+			tmpj = (t_file*)files->data[j];
+			if (ft_strcmp(tmpi->name->content, tmpj->name->content) > 0)
+				ft_arrayswap(files, i, j);
 		}
 	}
 }

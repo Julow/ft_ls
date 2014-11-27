@@ -75,3 +75,21 @@ t_map			*ft_maprem(t_array *array, char *key)
 	}
 	return (NULL);
 }
+
+void			ft_mapsort(t_array *array)
+{
+	int				i;
+	int				j;
+
+	i = -1;
+	while (++i < array->length)
+	{
+		j = i;
+		while (++j < array->length)
+		{
+			if (ft_strcmp(((t_map*)array->data[i])->key->content,
+				((t_map*)array->data[j])->key->content) > 0)
+				ft_arrayswap(array, i, j);
+		}
+	}
+}

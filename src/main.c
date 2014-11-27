@@ -18,6 +18,7 @@ void			*filenew(char *name, char *path, DIR *dir)
 
 	file = MAL1(t_file);
 	file->stats = MAL1(struct stat);
+	file->name = ft_strings(name);
 	file->path = ft_stringnew();
 	ft_stringadd(file->path, path);
 	while (file->path->length > 1 &&
@@ -56,12 +57,10 @@ void			ls(t_string *output, t_args *args)
 	{
 		dir = opendir(args->args[i]);
 		if (FLAG(FLAG_D) || (dir == NULL && errno == 20))
-			ft_arrayadd(files, ft_mapnew(args->args[i], filenew(args->args[i],
-				"", NULL)));
+			ft_arrayadd(files, filenew(args->args[i], "", NULL));
 		else
-			ft_arrayadd(((dir == NULL) ? errs : dirs), ft_mapnew(args->args[i],
-				(dir == NULL) ? strerror(errno) : filenew(args->args[i], "",
-					dir)));
+			ft_arrayadd(((dir == NULL) ? errs : dirs), (dir == NULL) ?
+				strerror(errno) : filenew(args->args[i], "", dir));
 	}
 	ls_errs(output, errs, args);
 	ls_files(output, files, args);

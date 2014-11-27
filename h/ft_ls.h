@@ -66,6 +66,7 @@ typedef struct	s_col
 
 typedef struct	s_file
 {
+	t_string		*name;
 	t_string		*path;
 	DIR				*dir;
 	struct stat		*stats;
@@ -92,6 +93,7 @@ t_map			*ft_mapnew(char *key, void *value);
 t_map			*ft_mapget(t_array *array, char *key);
 int				ft_mapchr(t_array *array, char *key);
 t_map			*ft_maprem(t_array *array, char *key);
+void			ft_mapsort(t_array *array);
 
 /*
 ** ls_errs.c
@@ -128,14 +130,13 @@ t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
 t_string		*get_time(time_t m_time);
-t_string		*get_name(t_string *name, t_file *file, t_args *args);
+t_string		*get_name(t_file *file, t_args *args);
 
 /*
 ** sort.c
 */
-void			ft_mapsort(t_array *array);
-void			filesort(t_array *files, t_args *args);
-void			dirsort(t_array *dirs, t_args *args);
+void			filesort_t(t_array *files, t_args *args);
+void			filesort(t_array *files);
 
 /*
 ** table.c
