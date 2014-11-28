@@ -74,7 +74,7 @@ static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)
 
 	ioctl(1, TIOCGSIZE, &ts);
 	i = -1;
-	columns = (ts.ts_cols > len && len > 0) ? ts.ts_cols / len : 1;
+	columns = (isatty(1) && ts.ts_cols > len && len > 0) ? ts.ts_cols / len : 1;
 	lines = files->length / columns + ((files->length % columns > 0) ? 1 : 0);
 	while (++i < lines)
 	{
@@ -87,15 +87,22 @@ static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)
 				ft_stringaddcn(out, ' ', len - tmp->name->length);
 		}
 		ft_stringaddc(out, '\n');
+		ft_stringput(out);
+		out->length = 0;
 	}
 }
 
 void			kill_file(void *file)
 {
-	ft_stringkil(((t_file*)file)->name);
-	ft_stringkil(((t_file*)file)->path);
-	free(((t_file*)file)->stats);
-	free(((t_file*)file));
+	t_file			*tmp;
+
+	tmp = (t_file*)file;
+	ft_stringkil(tmp->name);
+	ft_stringkil(tmp->path);
+	free(tmp->stats);
+	if (tmp->dir != NULL)
+		closedir(tmp->dir);
+	free(tmp);
 }
 
 void			ls_files(t_string *out, t_array *files, t_args *args)
@@ -121,6 +128,7 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 			&& (ft_strequ(tmp->name->content, ".") ||
 				ft_strequ(tmp->name->content, ".."))))
 		{
+			kill_file(files->data[i]);
 			ft_arrayrem(files, i--);
 			continue;
 		}

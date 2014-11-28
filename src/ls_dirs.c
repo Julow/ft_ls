@@ -45,8 +45,9 @@ static void		ls_dir(t_string *output, t_file *dir, t_args *args)
 
 	total = 0;
 	files = ft_arraynew();
+	ft_arrayext(files, dir->stats->st_nlink);
 	dirs = (FLAG(FLAG_RR)) ? ft_arraynew() : NULL;
-	while ((ent = readdir(dir->dir)) != NULL)
+	while (dir->dir != NULL && (ent = readdir(dir->dir)) != NULL)
 	{
 		tmp = filenew(ent->d_name, dir->path->content, NULL, args);
 		if ((FLAG(FLAG_AA) || !(tmp->name->content[0] == '.')) && (FLAG(FLAG_A)
@@ -88,6 +89,8 @@ void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
 			ft_stringadd(output, ":\n");
 		}
 		ls_dir(output, tmp, args);
+		ft_stringput(output);
+		output->length = 0;
 	}
 	ft_arraykil(dirs, &kill_file);
 }

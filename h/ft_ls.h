@@ -120,7 +120,7 @@ void			ls(t_string *output, t_args *args);
 /*
 ** argv.c
 */
-void			kill_args(t_args *args);
+void			kill_args(t_args **args);
 t_args			*get_args(int argc, char **argv);
 
 /*

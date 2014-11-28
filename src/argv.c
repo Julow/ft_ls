@@ -73,16 +73,17 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 	}
 }
 
-void			kill_args(t_args *args)
+void			kill_args(t_args **args)
 {
 	int				i;
 
-	free(args->program);
+	free((*args)->program);
 	i = -1;
-	while (++i < args->args_count)
-		free(args->args[i]);
-	free(args->args);
-	free(args);
+	while (++i < (*args)->args_count)
+		free((*args)->args[i]);
+	free((*args)->args);
+	free(*args);
+	*args = NULL;
 }
 
 t_args			*get_args(int argc, char **argv)
