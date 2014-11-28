@@ -39,7 +39,7 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 	return (str);
 }
 
-int				hide_file(t_array *files, int *i, t_args *args)
+t_bool			hide_file(t_array *files, int *i, t_args *args)
 {
 	t_file			*tmp;
 
@@ -50,6 +50,7 @@ int				hide_file(t_array *files, int *i, t_args *args)
 	{
 		kill_file(files->data[*i]);
 		ft_arrayrem(files, (*i)--);
-		continue;
+		return (TRUE);
 	}
+	return (FALSE);
 }

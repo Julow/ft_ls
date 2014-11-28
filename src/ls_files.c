@@ -112,11 +112,11 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 	int				max_len;
 	t_array			*table;
 
-	if (FLAG(FLAG_SORT))
+	if ((max_len = 8) == 8 && FLAG(FLAG_SORT))
 		filesort_t(files, args);
 	else if (!FLAG(FLAG_F))
 		filesort(files);
-	if ((i = -1) == -1 && (max_len == 8) == 8 && FLAG(FLAG_R))
+	if ((i = -1) == -1 && FLAG(FLAG_R))
 		ft_arrayrev(files);
 	table = init_table(8);
 	while (++i < files->length)

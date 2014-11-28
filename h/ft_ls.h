@@ -132,6 +132,7 @@ t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
 t_string		*get_time(time_t m_time);
 t_string		*get_name(t_file *file, char *name, t_args *args);
+t_bool			hide_file(t_array *files, int *i, t_args *args);
 
 /*
 ** sort.c
