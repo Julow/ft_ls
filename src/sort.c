@@ -61,7 +61,10 @@ void			filesort(t_array *files)
 		{
 			tmpj = (t_file*)files->data[j];
 			if (ft_strcmp(tmpi->name->content, tmpj->name->content) > 0)
+			{
 				ft_arrayswap(files, i, j);
+				tmpi = (t_file*)files->data[i];
+			}
 		}
 	}
 }

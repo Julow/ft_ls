@@ -125,6 +125,7 @@ t_args			*get_args(int argc, char **argv);
 
 /*
 ** utils.c
+** statutils.c
 */
 t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);

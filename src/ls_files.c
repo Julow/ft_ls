@@ -103,6 +103,7 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 	int				i;
 	int				max_len;
 	t_array			*table;
+	t_file			*tmp;
 
 	if (FLAG(FLAG_SORT))
 		filesort_t(files, args);
@@ -115,9 +116,17 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 	max_len = 8;
 	while (++i < files->length)
 	{
+		tmp = (t_file*)files->data[i];
+		if ((!FLAG(FLAG_AA) && (tmp->name->content[0] == '.')) || (!FLAG(FLAG_A)
+			&& (ft_strequ(tmp->name->content, ".") ||
+				ft_strequ(tmp->name->content, ".."))))
+		{
+			ft_arrayrem(files, i--);
+			continue;
+		}
 		if (FLAG(FLAG_1))
-			ls_file1(table, (t_file*)files->data[i], args);
-		while (((t_file*)files->data[i])->name->length >= max_len)
+			ls_file1(table, tmp, args);
+		while (tmp->name->length >= max_len)
 			max_len += 8;
 	}
 	if (!FLAG(FLAG_1))
