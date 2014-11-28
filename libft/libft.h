@@ -18,7 +18,16 @@
 # define MAL1(t)	((t*)malloc(sizeof(t)))
 # define MAL(t, l)	((t*)malloc(sizeof(t) * (l)))
 
+# define UCHAR	unsigned char
+# define UINT	unsigned int
+# define LONG	long long int
+# define ULONG	unsigned long long int
+
 typedef char	t_bool;
+typedef UCHAR	t_uchar;
+typedef UINT	t_uint;
+typedef LONG	t_long;
+typedef ULONG	t_ulong;
 
 # ifndef TRUE
 #  define TRUE		1
@@ -26,13 +35,9 @@ typedef char	t_bool;
 # ifndef FALSE
 #  define FALSE		0
 # endif
-
-typedef struct	s_list
-{
-	void			*content;
-	size_t			content_size;
-	struct s_list	*next;
-}				t_list;
+# ifndef ERROR
+#  define ERROR		-1
+# endif
 
 typedef struct	s_array
 {
@@ -102,6 +107,11 @@ int				ft_isprint(int c);
 t_bool			ft_isspace(char c);
 t_bool			ft_iswhite(char c);
 
+size_t			ft_tablen(void **array);
+
+/*
+** Write
+*/
 void			ft_putchar(char c);
 void			ft_putstr(char const *s);
 void			ft_putendl(char const *s);
@@ -111,20 +121,11 @@ void			ft_putstr_fd(char const *s, int fd);
 void			ft_putendl_fd(char const *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 
-t_list			*ft_lstnew(void const *content, size_t content_size);
-void			ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
-void			ft_lstdel(t_list **alst, void (*del)(void*, size_t));
-void			ft_lstadd(t_list **alst, t_list *add);
-void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-
-size_t			ft_tablen(void **array);
-
 /*
 ** Store pointers using the struct s_array (t_array)
 ** Allocate memory by block of 16 to reduce the number of free/malloc/copy
 */
-t_array			*ft_arraynew();
+t_array			*ft_arraynew(void);
 t_bool			ft_arrayadd(t_array *array, void *add);
 t_bool			ft_arrayset(t_array *array, void *set, int index);
 t_bool			ft_arrayins(t_array *array, void *ins, int index);
@@ -136,13 +137,13 @@ void			ft_arrayclr(void *array, void (*f)(void *data));
 void			ft_arraykil(void *array, void (*f)(void *data));
 void			ft_arrayswap(t_array *array, int i1, int i2);
 void			ft_arrayrev(t_array *array);
-t_bool			ft_arrayext(t_array *array);
+t_bool			ft_arrayext(t_array *array, int need);
 
 /*
 ** Manipulate string using the struct s_string (t_string)
 ** Allocate memory by block of 16 to reduce the number of free/malloc/copy
 */
-t_string		*ft_stringnew();
+t_string		*ft_stringnew(void);
 t_bool			ft_stringaddc(t_string *str, char c);
 t_bool			ft_stringadd(t_string *str, char *add);
 t_bool			ft_stringaddi(t_string *str, int nbr);
