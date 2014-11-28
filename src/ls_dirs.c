@@ -49,7 +49,10 @@ static void		ls_dir(t_string *output, t_file *dir, t_args *args)
 	while ((ent = readdir(dir->dir)) != NULL)
 	{
 		tmp = filenew(ent->d_name, dir->path->content, NULL, args);
-		total += tmp->stats->st_blocks;
+		if ((FLAG(FLAG_AA) || !(tmp->name->content[0] == '.')) && (FLAG(FLAG_A)
+			|| (!ft_strequ(tmp->name->content, ".") &&
+				!ft_strequ(tmp->name->content, ".."))))
+			total += tmp->stats->st_blocks;
 		ft_arrayadd(files, tmp);
 		check_dirent(ent, dirs, filenew(ent->d_name, dir->path->content, NULL,
 			args), args);

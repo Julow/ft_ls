@@ -55,7 +55,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 			getgrgid(file->stats->st_gid)->gr_name));
 		((t_col*)table->data[3])->left = 2;
 		col_add((t_col*)table->data[4], get_major(file->stats));
-		((t_col*)table->data[4])->left = -1;
+		((t_col*)table->data[4])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ? -3 : -1;
 		col_add((t_col*)table->data[5], get_minor(file->stats));
 		((t_col*)table->data[5])->left = FALSE;
 		col_add((t_col*)table->data[6],
