@@ -38,3 +38,18 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 	}
 	return (str);
 }
+
+int				hide_file(t_array *files, int *i, t_args *args)
+{
+	t_file			*tmp;
+
+	tmp = (t_file*)files->data[*i];
+	if ((!FLAG(FLAG_AA) && (tmp->name->content[0] == '.')) || (!FLAG(FLAG_A)
+		&& (ft_strequ(tmp->name->content, ".") ||
+			ft_strequ(tmp->name->content, ".."))))
+	{
+		kill_file(files->data[*i]);
+		ft_arrayrem(files, (*i)--);
+		continue;
+	}
+}

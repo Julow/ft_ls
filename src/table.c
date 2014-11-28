@@ -83,7 +83,5 @@ void			print_table(t_string *out, t_array *table)
 				ft_stringaddcn(out, ' ', (col->left > 0) ? col->left : 1);
 		}
 		ft_stringaddc(out, '\n');
-		ft_stringput(out);
-		out->length = 0;
 	}
 }

@@ -55,7 +55,8 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 			getgrgid(file->stats->st_gid)->gr_name));
 		((t_col*)table->data[3])->left = 2;
 		col_add((t_col*)table->data[4], get_major(file->stats));
-		((t_col*)table->data[4])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ? -3 : -1;
+		((t_col*)table->data[4])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ?
+			-3 : -1;
 		col_add((t_col*)table->data[5], get_minor(file->stats));
 		((t_col*)table->data[5])->left = FALSE;
 		col_add((t_col*)table->data[6],
@@ -74,7 +75,7 @@ static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)
 
 	ioctl(1, TIOCGSIZE, &ts);
 	i = -1;
-	columns = (isatty(1) && ts.ts_cols > len && len > 0) ? ts.ts_cols / len : 1;
+	columns = (ts.ts_cols > len && len > 0) ? ts.ts_cols / len : 1;
 	lines = files->length / columns + ((files->length % columns > 0) ? 1 : 0);
 	while (++i < lines)
 	{
@@ -110,31 +111,21 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 	int				i;
 	int				max_len;
 	t_array			*table;
-	t_file			*tmp;
 
 	if (FLAG(FLAG_SORT))
 		filesort_t(files, args);
 	else if (!FLAG(FLAG_F))
 		filesort(files);
-	if (FLAG(FLAG_R))
+	if ((i = -1) == -1 && (max_len == 8) == 8 && FLAG(FLAG_R))
 		ft_arrayrev(files);
 	table = init_table(8);
-	i = -1;
-	max_len = 8;
 	while (++i < files->length)
 	{
-		tmp = (t_file*)files->data[i];
-		if ((!FLAG(FLAG_AA) && (tmp->name->content[0] == '.')) || (!FLAG(FLAG_A)
-			&& (ft_strequ(tmp->name->content, ".") ||
-				ft_strequ(tmp->name->content, ".."))))
-		{
-			kill_file(files->data[i]);
-			ft_arrayrem(files, i--);
-			continue;
-		}
+		if (hide_file(files, &i, args))
+			continue ;
 		if (FLAG(FLAG_1))
-			ls_file1(table, tmp, args);
-		while (tmp->name->length >= max_len)
+			ls_file1(table, (t_file*)files->data[i], args);
+		while (((t_file*)files->data[i])->name->length >= max_len)
 			max_len += 8;
 	}
 	if (!FLAG(FLAG_1))
