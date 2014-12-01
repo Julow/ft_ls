@@ -48,11 +48,9 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 			file->stats->st_mode));
 		col_add((t_col*)table->data[1], ft_stringi(file->stats->st_nlink));
 		((t_col*)table->data[1])->left = FALSE;
-		col_add((t_col*)table->data[2], ft_strings((FLAG(FLAG_G)) ? "" :
-			getpwuid(file->stats->st_uid)->pw_name));
+		col_add((t_col*)table->data[2], get_pwuid(file->stats->st_uid, args));
 		((t_col*)table->data[2])->left = 2;
-		col_add((t_col*)table->data[3], ft_strings((FLAG(FLAG_O)) ? "" :
-			getgrgid(file->stats->st_gid)->gr_name));
+		col_add((t_col*)table->data[3], get_grgid(file->stats->st_gid, args));
 		((t_col*)table->data[3])->left = 2;
 		col_add((t_col*)table->data[4], get_major(file->stats));
 		((t_col*)table->data[4])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ?

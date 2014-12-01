@@ -14,26 +14,26 @@
 
 static void		kill_err(void *err)
 {
-	ft_stringkil(((t_map*)err)->key);
+	ft_stringkil(((t_pair*)err)->key);
 	free(err);
 }
 
-void			ls_errs(t_string *output, t_array *errs, t_args *args)
+void			ls_errs(t_array *errs, t_args *args)
 {
 	int				i;
-	t_map			*tmp;
+	t_pair			*tmp;
 
 	if (!FLAG(FLAG_F))
-		ft_mapsort(errs);
+		ft_pairsort(errs);
 	i = -1;
 	while (++i < errs->length)
 	{
-		tmp = (t_map*)errs->data[i];
-		ft_stringadd(output, "ft_ls: ");
-		ft_stringaddl(output, tmp->key->content, tmp->key->length);
-		ft_stringadd(output, ": ");
-		ft_stringadd(output, (char*)tmp->value);
-		ft_stringaddc(output, '\n');
+		tmp = (t_pair*)errs->data[i];
+		ft_putstr_fd("ft_ls: ", 2);
+		ft_putstr_fd(tmp->key->content, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd((char*)tmp->value, 2);
+		ft_putchar_fd('\n', 2);
 	}
 	ft_arraykil(errs, &kill_err);
 }

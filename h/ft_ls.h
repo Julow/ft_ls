@@ -77,7 +77,7 @@ typedef struct	s_argv
 /*
 ** ls_errs.c
 */
-void			ls_errs(t_string *output, t_array *errs, t_args *args);
+void			ls_errs(t_array *errs, t_args *args);
 
 /*
 ** ls_files.c
@@ -108,12 +108,14 @@ t_args			*get_args(int argc, char **argv);
 */
 t_string		*ft_stringi(int n);
 t_string		*get_name(t_file *file, char *name, t_args *args);
+t_string		*get_time(time_t m_time);
 t_bool			hide_file(t_array *files, int *i, t_args *args);
 
+t_string		*get_pwuid(uid_t id, t_args *args);
+t_string		*get_grgid(uid_t id, t_args *args);
 t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
-t_string		*get_time(time_t m_time);
 
 /*
 ** sort.c

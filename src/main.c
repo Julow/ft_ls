@@ -60,9 +60,10 @@ void			ls(t_string *output, t_args *args)
 			ft_arrayadd(files, filenew(args->args[i], "", dir, args));
 		else
 			ft_arrayadd(((dir == NULL) ? errs : dirs), (dir == NULL) ?
-				strerror(errno) : filenew(args->args[i], "", dir, args));
+				ft_pairnew(args->args[i], strerror(errno)) :
+				filenew(args->args[i], "", dir, args));
 	}
-	ls_errs(output, errs, args);
+	ls_errs(errs, args);
 	ls_files(output, files, args);
 	ls_dirs(output, dirs, args, files->length);
 	ft_arraykil(files, &kill_file);
