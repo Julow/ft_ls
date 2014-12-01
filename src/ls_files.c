@@ -63,7 +63,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 	col_add((t_col*)table->data[7], ft_stringdup(file->name));
 }
 
-static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)
+static void		ls_column(t_array *files, int len, t_file *tmp)
 {
 	int				i;
 	int				j;
@@ -81,13 +81,11 @@ static void		ls_column(t_string *out, t_array *files, int len, t_file *tmp)
 		while (++j < columns && j * lines + i < files->length)
 		{
 			tmp = (t_file*)files->data[j * lines + i];
-			ft_stringaddl(out, tmp->name->content, tmp->name->length);
+			ft_putlstr(tmp->name->content, tmp->name->length);
 			if (j + 1 < columns)
-				ft_stringaddcn(out, ' ', len - tmp->name->length);
+				ft_putnchar(' ', len - tmp->name->length);
 		}
-		ft_stringaddc(out, '\n');
-		ft_stringput(out);
-		out->length = 0;
+		ft_putchar('\n');
 	}
 }
 
@@ -104,7 +102,7 @@ void			kill_file(void *file)
 	free(tmp);
 }
 
-void			ls_files(t_string *out, t_array *files, t_args *args)
+void			ls_files(t_array *files, t_args *args)
 {
 	int				i;
 	int				max_len;
@@ -127,8 +125,8 @@ void			ls_files(t_string *out, t_array *files, t_args *args)
 			max_len += 8;
 	}
 	if (!FLAG(FLAG_1))
-		ls_column(out, files, max_len, NULL);
+		ls_column(files, max_len, NULL);
 	else
-		print_table(out, table);
+		print_table(table);
 	ft_arraykil(table, kill_col);
 }

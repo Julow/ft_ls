@@ -12,11 +12,11 @@
 
 #include "ft_ls.h"
 
-static void		write_total(t_string *output, int total)
+static void		write_total(int total)
 {
-	ft_stringadd(output, "total ");
-	ft_stringaddi(output, total);
-	ft_stringaddc(output, '\n');
+	ft_putstr("total ");
+	ft_putnbr(total);
+	ft_putchar('\n');
 }
 
 static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *tmp,
@@ -35,7 +35,7 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *tmp,
 		kill_file(tmp);
 }
 
-static void		ls_dir(t_string *output, t_file *dir, t_args *args, t_file *tmp)
+static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 {
 	t_array			*files;
 	t_array			*dirs;
@@ -57,14 +57,14 @@ static void		ls_dir(t_string *output, t_file *dir, t_args *args, t_file *tmp)
 			args), args);
 	}
 	if (FLAG(FLAG_L))
-		write_total(output, total);
-	ls_files(output, files, args);
+		write_total(total);
+	ls_files(files, args);
 	ft_arraykil(files, &kill_file);
 	if (FLAG(FLAG_RR))
-		ls_dirs(output, dirs, args, 1);
+		ls_dirs(dirs, args, 1);
 }
 
-void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
+void			ls_dirs(t_array *dirs, t_args *args, int f)
 {
 	int				i;
 	t_file			*tmp;
@@ -82,13 +82,11 @@ void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f)
 		if (args->args_count > 1)
 		{
 			if (i > 0 || f > 0)
-				ft_stringaddc(output, '\n');
-			ft_stringaddl(output, tmp->path->content, tmp->path->length);
-			ft_stringadd(output, ":\n");
+				f_putchar('\n');
+			ft_putlstr(tmp->path->content, tmp->path->length);
+			ft_putstr(":\n");
 		}
-		ls_dir(output, tmp, args, NULL);
-		ft_stringput(output);
-		output->length = 0;
+		ls_dir(tmp, args, NULL);
 	}
 	ft_arraykil(dirs, &kill_file);
 }

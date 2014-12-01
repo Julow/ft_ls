@@ -41,7 +41,7 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 	return ((void*)file);
 }
 
-void			ls(t_string *output, t_args *args)
+void			ls(t_args *args)
 {
 	t_array			*files;
 	t_array			*dirs;
@@ -64,22 +64,17 @@ void			ls(t_string *output, t_args *args)
 				filenew(args->args[i], "", dir, args));
 	}
 	ls_errs(errs, args);
-	ls_files(output, files, args);
-	ls_dirs(output, dirs, args, files->length);
+	ls_files(files, args);
+	ls_dirs(dirs, args, files->length);
 	ft_arraykil(files, &kill_file);
 }
 
 int				main(int argc, char **argv)
 {
 	t_args			*args;
-	t_string		*output;
 
 	args = get_args(argc, argv);
-	output = ft_stringnew();
-	ft_stringext(output, args->args_count * 64);
-	ls(output, args);
-	ft_stringput(output);
-	ft_stringkil(output);
+	ls(args);
 	kill_args(&args);
 	return (0);
 }
