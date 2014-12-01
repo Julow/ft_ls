@@ -81,19 +81,19 @@ void			ls_errs(t_array *errs, t_args *args);
 /*
 ** ls_files.c
 */
-void			ls_files(t_string *output, t_array *files, t_args *args);
+void			ls_files(t_array *files, t_args *args);
 
 /*
 ** ls_files.c
 */
 void			kill_file(void *file);
-void			ls_dirs(t_string *output, t_array *dirs, t_args *args, int f);
+void			ls_dirs(t_array *dirs, t_args *args, int f);
 
 /*
 ** main.c
 */
 void			*filenew(char *name, char *path, DIR *dir, t_args *args);
-void			ls(t_string *output, t_args *args);
+void			ls(t_args *args);
 
 /*
 ** argv.c
@@ -128,6 +128,6 @@ void			filesort(t_array *files);
 void			col_add(t_col *col, t_string *str);
 t_array			*init_table(int length);
 void			kill_col(void *col);
-void			print_table(t_string *out, t_array *table);
+void			print_table(t_array *table);
 
 #endif

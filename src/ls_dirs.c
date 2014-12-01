@@ -82,7 +82,7 @@ void			ls_dirs(t_array *dirs, t_args *args, int f)
 		if (args->args_count > 1)
 		{
 			if (i > 0 || f > 0)
-				f_putchar('\n');
+				ft_putchar('\n');
 			ft_putlstr(tmp->path->content, tmp->path->length);
 			ft_putstr(":\n");
 		}

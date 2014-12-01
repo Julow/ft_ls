@@ -57,7 +57,7 @@ t_array			*init_table(int length)
 	return (table);
 }
 
-void			print_table(t_string *out, t_array *table)
+void			print_table(t_array *table)
 {
 	int const		length = get_line_count(table);
 	int				i;

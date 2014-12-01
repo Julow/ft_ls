@@ -59,7 +59,7 @@ static void		add_arg(t_args *targs, char *add)
 	targs->args_count++;
 }
 
-static void		read_flags(t_args *args, char *str, int const *flags)
+static void		read_flags(t_args *args, char *str, int *flags, char *arg0)
 {
 	int				i;
 
@@ -78,7 +78,7 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 		}
 		if (flags[i] == 0)
 		{
-			ft_putstr_fd(args->program, 2);
+			ft_putstr_fd(arg0, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
 			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglortu1] [file ...]\n", 2);
@@ -113,7 +113,7 @@ t_args			*get_args(int argc, char **argv)
 		if (ft_strequ(*argv, "--"))
 			break ;
 		else if (**argv == '-' && *(*argv + 1) != '\0')
-			read_flags(args, *argv, flags);
+			read_flags(args, *argv, flags, *argv);
 		else
 		{
 			add_arg(args, *argv);
