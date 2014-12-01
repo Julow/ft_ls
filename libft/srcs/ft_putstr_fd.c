@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <unistd.h>
 
 void			ft_putstr_fd(char const *s, int fd)
 {
-	if (s != NULL)
-		(void)(1 + write(fd, s, ft_strlen(s)));
+	ft_putlstr_fd(s, ft_strlen(s), fd);
 }
