@@ -12,6 +12,15 @@
 
 #include "ft_ls.h"
 
+t_string		*ft_stringi(int n)
+{
+	t_string		*tmp;
+
+	tmp = ft_stringnew();
+	ft_stringaddi(tmp, n);
+	return (tmp);
+}
+
 t_string		*get_name(t_file *file, char *name, t_args *args)
 {
 	t_string		*str;

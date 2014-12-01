@@ -51,12 +51,6 @@ typedef struct timespec		t_time;
 
 typedef struct stat			t_stat;
 
-typedef struct	s_map
-{
-	t_string		*key;
-	void			*value;
-}				t_map;
-
 typedef struct	s_col
 {
 	int				max_length;
@@ -79,21 +73,6 @@ typedef struct	s_argv
 	int				args_count;
 	int				flags;
 }				t_args;
-
-/*
-** string_utils.c
-*/
-t_string		*ft_stringi(int n);
-t_string		*ft_strings(char *str);
-
-/*
-** map.c
-*/
-t_map			*ft_mapnew(char *key, void *value);
-t_map			*ft_mapget(t_array *array, char *key);
-int				ft_mapchr(t_array *array, char *key);
-t_map			*ft_maprem(t_array *array, char *key);
-void			ft_mapsort(t_array *array);
 
 /*
 ** ls_errs.c
@@ -127,12 +106,14 @@ t_args			*get_args(int argc, char **argv);
 ** utils.c
 ** statutils.c
 */
+t_string		*ft_stringi(int n);
+t_string		*get_name(t_file *file, char *name, t_args *args);
+t_bool			hide_file(t_array *files, int *i, t_args *args);
+
 t_string		*get_minor(struct stat *s);
 t_string		*get_major(struct stat *s);
 char			get_special_mode(mode_t ifmt);
 t_string		*get_time(time_t m_time);
-t_string		*get_name(t_file *file, char *name, t_args *args);
-t_bool			hide_file(t_array *files, int *i, t_args *args);
 
 /*
 ** sort.c
