@@ -54,7 +54,7 @@ typedef struct stat			t_stat;
 typedef struct	s_col
 {
 	int				max_length;
-	t_bool			left;
+	int				left;
 	t_array			*lines;
 }				t_col;
 
@@ -68,7 +68,6 @@ typedef struct	s_file
 
 typedef struct	s_argv
 {
-	char			*program;
 	char			**args;
 	int				args_count;
 	int				flags;

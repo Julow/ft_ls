@@ -47,7 +47,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 		col_add((t_col*)table->data[0], get_modes(file->path->content,
 			file->stats->st_mode));
 		col_add((t_col*)table->data[1], ft_stringi(file->stats->st_nlink));
-		((t_col*)table->data[1])->left = FALSE;
+		((t_col*)table->data[1])->left = 0;
 		col_add((t_col*)table->data[2], get_pwuid(file->stats->st_uid, args));
 		((t_col*)table->data[2])->left = 2;
 		col_add((t_col*)table->data[3], get_grgid(file->stats->st_gid, args));
@@ -56,7 +56,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 		((t_col*)table->data[4])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ?
 			-3 : -1;
 		col_add((t_col*)table->data[5], get_minor(file->stats));
-		((t_col*)table->data[5])->left = FALSE;
+		((t_col*)table->data[5])->left = 0;
 		col_add((t_col*)table->data[6],
 			get_time(file->stats->st_mtimespec.tv_sec));
 	}

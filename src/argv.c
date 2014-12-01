@@ -17,12 +17,24 @@ static void		inflate_flags(int **flags)
 	int				len;
 	const int		tmp[] = {
 
-	'a', FLAG_A, 'A', FLAG_AA, 'f', FLAG_F, '1', FLAG_1, 'r', FLAG_R,
-	'l', FLAG_L, 'F', FLAG_FF, 't', FLAG_T, 'g', FLAG_G, 'o', FLAG_O,
-	'R', FLAG_RR,
-	'u', FLAG_U, 'U', FLAG_UU, 'd', FLAG_D,
+	'a', FLAG_A, 0,
+	'A', FLAG_AA, 0,
+	'f', FLAG_F, FLAG_SORT,
+	'1', FLAG_1, FLAG_L,
+	'r', FLAG_R, 0,
+	'l', FLAG_L, FLAG_1,
+	'F', FLAG_FF, 0,
+	't', FLAG_T, FLAG_SORT,
+	'g', FLAG_G, FLAG_1,
+	'o', FLAG_O, FLAG_1,
+	'R', FLAG_RR, 0,
+	'u', FLAG_U, FLAG_SORT,
+	'U', FLAG_UU, FLAG_SORT,
+	'd', FLAG_D, 0,
 	0};
-	len = 23;
+	len = 0;
+	while (tmp[len] != 0)
+		len += 3;
 	*flags = MAL(int, len);
 	while (--len >= 0)
 		(*flags)[len] = tmp[len];
@@ -53,11 +65,13 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 
 	while (*(++str) != '\0')
 	{
-		i = -2;
-		while (flags[(i += 2)] != 0)
+		i = -3;
+		while (flags[(i += 3)] != 0)
 		{
 			if (((char)flags[i]) == *str)
 			{
+				if ((args->flags & flags[i + 2]) == flags[i + 2])
+					args->flags = args->flags ^ flags[i + 2];
 				args->flags = args->flags | flags[i + 1];
 				break ;
 			}
@@ -67,7 +81,7 @@ static void		read_flags(t_args *args, char *str, int const *flags)
 			ft_putstr_fd(args->program, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
-			ft_putstr_fd("\nusage: ft_ls [-AFRUafglortu1] [file ...]\n", 2);
+			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglortu1] [file ...]\n", 2);
 			exit(2);
 		}
 	}
@@ -77,7 +91,6 @@ void			kill_args(t_args **args)
 {
 	int				i;
 
-	free((*args)->program);
 	i = -1;
 	while (++i < (*args)->args_count)
 		free((*args)->args[i]);
@@ -92,7 +105,6 @@ t_args			*get_args(int argc, char **argv)
 	int				*flags;
 
 	args = MAL1(t_args);
-	args->program = ft_strdup(*argv);
 	args->args = ft_memalloc(1);
 	args->args_count = 0;
 	args->flags = 0;
