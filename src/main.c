@@ -41,28 +41,39 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 	return ((void*)file);
 }
 
+static void		ls_args(t_array *files, t_array *dirs, t_array *errs,
+	t_args *args)
+{
+	int				i;
+	DIR				*dir;
+	t_file			*tmp;
+
+	i = -1;
+	while (++i < args->args_count)
+	{
+		dir = opendir(args->args[i]);
+		if (dir == NULL && errno != 20)
+			return ((void)ft_arrayadd(errs, ft_pairnew((args->args[i][0] ==
+				'\0') ? "fts_open" : args->args[i], strerror(errno))));
+		tmp = filenew(args->args[i], "", dir, args);
+		if (dir != NULL && (!FLAG(FLAG_L) || (tmp->stats->st_mode & S_IFMT) !=
+			S_IFLNK))
+			ft_arrayadd(dirs, tmp);
+		else
+			ft_arrayadd(files, tmp);
+	}
+}
+
 void			ls(t_args *args)
 {
 	t_array			*files;
 	t_array			*dirs;
 	t_array			*errs;
-	DIR				*dir;
-	int				i;
 
 	files = ft_arraynew();
 	dirs = ft_arraynew();
 	errs = ft_arraynew();
-	i = -1;
-	while (++i < args->args_count)
-	{
-		dir = opendir(args->args[i]);
-		if (FLAG(FLAG_D) || (dir == NULL && errno == 20))
-			ft_arrayadd(files, filenew(args->args[i], "", dir, args));
-		else
-			ft_arrayadd(((dir == NULL) ? errs : dirs), (dir == NULL) ?
-				ft_pairnew(args->args[i], strerror(errno)) :
-				filenew(args->args[i], "", dir, args));
-	}
+	ls_args(files, dirs, errs, args);
 	ls_errs(errs, args);
 	ls_files(files, args);
 	ls_dirs(dirs, args, files->length);

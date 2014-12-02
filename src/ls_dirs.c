@@ -19,20 +19,25 @@ static void		write_total(int total)
 	ft_putchar('\n');
 }
 
-static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *tmp,
+static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 	t_args *args)
 {
+	t_file			*tmp;
+
 	if (args->args_count < 2)
 		args->args_count = 2;
 	if (FLAG(FLAG_RR) && ent->d_type == DT_DIR &&
-		!ft_strequ(tmp->name->content, ".") &&
-		!ft_strequ(tmp->name->content, ".."))
+		!ft_strequ(file->name->content, ".") &&
+		!ft_strequ(file->name->content, "..")
+		&& (!FLAG(FLAG_L) || (file->stats->st_mode & S_IFMT) != S_IFLNK))
 	{
-		tmp->dir = opendir(tmp->path->content);
-		ft_arrayadd(dirs, tmp);
+		tmp = MAL1(t_file);
+		tmp->name = ft_stringdup(file->name);
+		tmp->path = ft_stringdup(file->path);
+		tmp->dir = opendir(file->path->content);
+		tmp->stats = MAL1(struct stat);
+		ft_arrayadd(dirs, file);
 	}
-	else
-		kill_file(tmp);
 }
 
 static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
@@ -53,8 +58,7 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 			(FLAG(FLAG_A) || (!ft_strequ(tmp->name->content, ".") &&
 			!ft_strequ(tmp->name->content, "..")))) ? tmp->stats->st_blocks : 0;
 		ft_arrayadd(files, tmp);
-		check_dirent(ent, dirs, filenew(ent->d_name, dir->path->content, NULL,
-			args), args);
+		check_dirent(ent, dirs, tmp, args);
 	}
 	if (FLAG(FLAG_L))
 		write_total(total);

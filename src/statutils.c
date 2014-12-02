@@ -16,9 +16,9 @@ t_string		*get_pwuid(uid_t id, t_args *args)
 {
 	struct passwd	*passwd;
 
-	passwd = getpwuid(id);
 	if (FLAG(FLAG_G))
 		return (ft_stringnews(""));
+	passwd = (FLAG(FLAG_N)) ? NULL : getpwuid(id);
 	if (passwd != NULL && passwd->pw_name != NULL)
 		return (ft_stringnews(passwd->pw_name));
 	return (ft_stringi(id));
@@ -28,9 +28,9 @@ t_string		*get_grgid(uid_t id, t_args *args)
 {
 	struct group	*grp;
 
-	grp = getgrgid(id);
 	if (FLAG(FLAG_O))
 		return (ft_stringnews(""));
+	grp = (FLAG(FLAG_N)) ? NULL : getgrgid(id);
 	if (grp != NULL && grp->gr_name != NULL)
 		return (ft_stringnews(grp->gr_name));
 	return (ft_stringi(id));

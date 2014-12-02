@@ -51,7 +51,6 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 t_string		*get_time(time_t m_time)
 {
 	time_t			now;
-	time_t const	timeout = 6 * 30 * 24 * 60 * 60;
 	char			**split;
 	int				i;
 	t_string		*tmp;
@@ -63,7 +62,7 @@ t_string		*get_time(time_t m_time)
 	ft_stringaddcn(tmp, ' ', (ft_strlen(split[2]) == 1) ? 2 : 1);
 	ft_stringadd(tmp, split[2]);
 	ft_stringaddc(tmp, ' ');
-	if (m_time <= now - timeout || m_time >= now + timeout)
+	if (m_time <= now - MONTH(6) || m_time > now)
 	{
 		ft_stringaddc(tmp, ' ');
 		ft_stringaddl(tmp, split[4], 4);

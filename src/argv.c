@@ -12,11 +12,7 @@
 
 #include "ft_ls.h"
 
-static void		inflate_flags(int **flags)
-{
-	int				len;
-	const int		tmp[] = {
-
+int				g_flags[] = {
 	'a', FLAG_A, 0,
 	'A', FLAG_AA, 0,
 	'f', FLAG_F, FLAG_SORT,
@@ -24,21 +20,17 @@ static void		inflate_flags(int **flags)
 	'r', FLAG_R, 0,
 	'l', FLAG_L, FLAG_1,
 	'F', FLAG_FF, 0,
-	't', FLAG_T, FLAG_SORT,
+	't', FLAG_T, FLAG_UU | FLAG_U | FLAG_SS,
 	'g', FLAG_G, FLAG_1,
 	'o', FLAG_O, FLAG_1,
 	'R', FLAG_RR, 0,
-	'u', FLAG_U, FLAG_SORT,
-	'U', FLAG_UU, FLAG_SORT,
+	'u', FLAG_U, FLAG_SS | FLAG_UU | FLAG_T,
+	'U', FLAG_UU, FLAG_SS | FLAG_U | FLAG_T,
+	'n', FLAG_N, 0,
 	'd', FLAG_D, 0,
-	0};
-	len = 0;
-	while (tmp[len] != 0)
-		len += 3;
-	*flags = MAL(int, len);
-	while (--len >= 0)
-		(*flags)[len] = tmp[len];
-}
+	'S', FLAG_SS, FLAG_UU | FLAG_U | FLAG_T,
+	0
+};
 
 static void		add_arg(t_args *targs, char *add)
 {
@@ -59,29 +51,28 @@ static void		add_arg(t_args *targs, char *add)
 	targs->args_count++;
 }
 
-static void		read_flags(t_args *args, char *str, int *flags, char *arg0)
+static void		read_flags(t_args *args, char *str, char *arg0)
 {
 	int				i;
 
 	while (*(++str) != '\0')
 	{
 		i = -3;
-		while (flags[(i += 3)] != 0)
+		while (g_flags[(i += 3)] != 0)
 		{
-			if (((char)flags[i]) == *str)
+			if (((char)g_flags[i]) == *str)
 			{
-				if ((args->flags & flags[i + 2]) == flags[i + 2])
-					args->flags = args->flags ^ flags[i + 2];
-				args->flags = args->flags | flags[i + 1];
+				args->flags = args->flags & (g_flags[i + 2] ^ 0xFFFFFFFF);
+				args->flags = args->flags | g_flags[i + 1];
 				break ;
 			}
 		}
-		if (flags[i] == 0)
+		if (g_flags[i] == 0)
 		{
 			ft_putstr_fd(arg0, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
-			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglortu1] [file ...]\n", 2);
+			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglnortu1] [file ...]\n", 2);
 			exit(2);
 		}
 	}
@@ -102,24 +93,21 @@ void			kill_args(t_args **args)
 t_args			*get_args(int argc, char **argv)
 {
 	t_args			*args;
-	int				*flags;
 
 	args = MAL1(t_args);
 	args->args = ft_memalloc(1);
 	args->args_count = 0;
 	args->flags = 0;
-	inflate_flags(&flags);
 	while (--argc > 0 && argv++)
 		if (ft_strequ(*argv, "--"))
 			break ;
 		else if (**argv == '-' && *(*argv + 1) != '\0')
-			read_flags(args, *argv, flags, *argv);
+			read_flags(args, *argv, *argv);
 		else
 		{
 			add_arg(args, *argv);
 			break ;
 		}
-	free(flags);
 	while (--argc > 0 && argv++)
 		add_arg(args, *argv);
 	if (args->args_count == 0)

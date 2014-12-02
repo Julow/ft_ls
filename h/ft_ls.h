@@ -28,6 +28,8 @@
 
 # define FLAG(m)	((args->flags & (m)) == (m))
 
+# define MONTH(m)	((m) * 30 * 24 * 60 * 60)
+
 # define FLAG_SORT	(1 << 31)
 # define FLAG_L		((1) | FLAG_1)
 # define FLAG_A		((1 << 1) | FLAG_AA)
@@ -43,6 +45,8 @@
 # define FLAG_G		(1 << 11 | FLAG_L)
 # define FLAG_FF	(1 << 12)
 # define FLAG_O		(1 << 14 | FLAG_L)
+# define FLAG_N		(1 << 15 | FLAG_L)
+# define FLAG_SS	(1 << 16 | FLAG_SORT)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))
