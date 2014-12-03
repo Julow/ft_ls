@@ -30,7 +30,7 @@ static int		get_line_count(t_array *table)
 void			kill_col(void *col)
 {
 	ft_arraykil(((t_col*)col)->lines, &ft_stringkil);
-	free(col);
+	ft_gbfree(col);
 }
 
 void			col_add(t_col *col, t_string *str)

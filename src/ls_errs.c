@@ -15,7 +15,7 @@
 static void		kill_err(void *err)
 {
 	ft_stringkil(((t_pair*)err)->key);
-	free(err);
+	ft_gbfree(err);
 }
 
 void			ls_errs(t_array *errs, t_args *args)

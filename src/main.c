@@ -34,7 +34,7 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(strerror(errno), 2);
 		ft_stringkil(file->path);
-		free(file);
+		ft_gbfree(file);
 		return (NULL);
 	}
 	file->name = get_name(file, name, args);

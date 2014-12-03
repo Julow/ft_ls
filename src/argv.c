@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 int				g_flags[] = {
 	'a', FLAG_A, 0,
@@ -45,7 +46,7 @@ static void		add_arg(t_args *targs, char *add)
 		targs->args[i] = tmp[i];
 		i++;
 	}
-	free(tmp);
+	ft_gbfree(tmp);
 	targs->args[i] = ft_strdup(add);
 	targs->args[i + 1] = NULL;
 	targs->args_count++;
@@ -73,6 +74,7 @@ static void		read_flags(t_args *args, char *str, char *arg0)
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
 			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglnortu1] [file ...]\n", 2);
+			ft_gbclear();
 			exit(2);
 		}
 	}
@@ -84,9 +86,9 @@ void			kill_args(t_args **args)
 
 	i = -1;
 	while (++i < (*args)->args_count)
-		free((*args)->args[i]);
-	free((*args)->args);
-	free(*args);
+		ft_gbfree((*args)->args[i]);
+	ft_gbfree((*args)->args);
+	ft_gbfree(*args);
 	*args = NULL;
 }
 
@@ -95,7 +97,8 @@ t_args			*get_args(int argc, char **argv)
 	t_args			*args;
 
 	args = MAL1(t_args);
-	args->args = ft_memalloc(1);
+	args->args = MAL1(char*);
+	args->args[0] = NULL;
 	args->args_count = 0;
 	args->flags = 0;
 	while (--argc > 0 && argv++)

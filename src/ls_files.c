@@ -59,8 +59,10 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 		((t_col*)table->data[5])->left = 0;
 		col_add((t_col*)table->data[6],
 			get_time(file->stats->st_mtimespec.tv_sec));
+		col_add((t_col*)table->data[7], ft_stringdup(file->name));
 	}
-	col_add((t_col*)table->data[7], ft_stringdup(file->name));
+	else
+		ft_putendl(file->name->content);
 }
 
 static void		ls_column(t_array *files, int len, t_file *tmp)
@@ -96,10 +98,10 @@ void			kill_file(void *file)
 	tmp = (t_file*)file;
 	ft_stringkil(tmp->name);
 	ft_stringkil(tmp->path);
-	free(tmp->stats);
+	ft_gbfree(tmp->stats);
 	if (tmp->dir != NULL)
 		closedir(tmp->dir);
-	free(tmp);
+	ft_gbfree(tmp);
 }
 
 void			ls_files(t_array *files, t_args *args)
@@ -126,7 +128,7 @@ void			ls_files(t_array *files, t_args *args)
 	}
 	if (!FLAG(FLAG_1))
 		ls_column(files, max_len, NULL);
-	else
+	else if (FLAG(FLAG_L))
 		print_table(table);
 	ft_arraykil(table, kill_col);
 }

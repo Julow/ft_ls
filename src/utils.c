@@ -71,8 +71,8 @@ t_string		*get_time(time_t m_time)
 		ft_stringaddl(tmp, split[3], 5);
 	i = -1;
 	while (split[++i] != NULL)
-		free(split[i]);
-	free(split);
+		ft_gbfree(split[i]);
+	ft_gbfree(split);
 	return (tmp);
 }
 
