@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stringset.c                                     :+:      :+:    :+:   */
+/*   ft_gbmalloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/15 19:38:49 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/17 12:30:42 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/03 15:46:10 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/03 15:46:11 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-void			ft_stringset(t_string *str, char *set, int index)
+void			*ft_gbmalloc(t_uint size)
 {
-	ft_stringsetl(str, set, index, ft_strlen(set));
+	void			*ptr;
+
+	ptr = malloc(size);
+	if (ptr == NULL)
+	{
+		ft_putstr_fd("Error: Not enough memory.\n", 2);
+		ft_gbclear();
+		exit(1);
+	}
+	ft_arrayadd(*(ft_gbget()), ptr);
+	return (ptr);
 }
