@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stringset.c                                     :+:      :+:    :+:   */
+/*   ft_gbclear.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/15 19:38:49 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/17 12:30:42 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/03 15:46:24 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/03 15:46:24 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-void			ft_stringset(t_string *str, char *set, int index)
+static void		gb_free_one(void *ptr)
 {
-	ft_stringsetl(str, set, index, ft_strlen(set));
+	if (ptr != NULL)
+		free(ptr);
+}
+
+void			ft_gbclear(void)
+{
+	t_array			**gb;
+
+	gb = ft_gbget();
+	ft_arraykil(*gb, &gb_free_one);
+	*gb = NULL;
 }

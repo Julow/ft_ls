@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stringset.c                                     :+:      :+:    :+:   */
+/*   ft_gbget.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/15 19:38:49 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/17 12:30:42 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/03 15:45:58 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/03 15:45:59 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-void			ft_stringset(t_string *str, char *set, int index)
+t_array			**ft_gbget(void)
 {
-	ft_stringsetl(str, set, index, ft_strlen(set));
+	static t_array	*gb = NULL;
+
+	if (gb == NULL)
+	{
+		gb = (t_array*)malloc(sizeof(t_array));
+		gb->data = (void**)malloc(16);
+		gb->length = 0;
+		gb->alloc_length = (gb->data == NULL) ? 0 : 16;
+	}
+	return (&gb);
 }

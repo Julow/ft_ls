@@ -15,8 +15,8 @@
 
 # include <stddef.h>
 
-# define MAL1(t)	((t*)malloc(sizeof(t)))
-# define MAL(t, l)	((t*)malloc(sizeof(t) * (l)))
+# define MAL(t,l)	((t*)ft_gbmalloc(sizeof(t) * (l)))
+# define MAL1(t)	((t*)ft_gbmalloc(sizeof(t)))
 
 # define UCHAR	unsigned char
 # define UINT	unsigned int
@@ -150,22 +150,30 @@ void			ft_putendl(char *s);
 void			ft_putendl_fd(char *s, int fd);
 
 /*
+** Manage malloc/free and store pointers to handle malloc error and avoid leaks
+*/
+t_array			**ft_gbget(void);
+void			*ft_gbmalloc(t_uint size);
+void			ft_gbfree(void *ptr);
+void			ft_gbclear(void);
+
+/*
 ** Store pointers using the struct s_array (t_array)
 ** Allocate memory by block of 16 to reduce the number of free/malloc/copy
 */
 t_array			*ft_arraynew(void);
-t_bool			ft_arrayadd(t_array *array, void *add);
-t_bool			ft_arrayset(t_array *array, void *set, int index);
-t_bool			ft_arrayins(t_array *array, void *ins, int index);
+void			ft_arrayadd(t_array *array, void *add);
+void			ft_arrayset(t_array *array, void *set, int index);
+void			ft_arrayins(t_array *array, void *ins, int index);
 void			*ft_arrayrem(t_array *array, int index);
 int				ft_arraychr(t_array *array, void *chr);
-t_bool			ft_arrayapp(t_array *array, t_array *app);
-t_bool			ft_arrayfree(t_array *array);
+void			ft_arrayapp(t_array *array, t_array *app);
+void			ft_arrayfree(t_array *array);
 void			ft_arrayclr(void *array, void (*f)(void *data));
 void			ft_arraykil(void *array, void (*f)(void *data));
 void			ft_arrayswap(t_array *array, int i1, int i2);
 void			ft_arrayrev(t_array *array);
-t_bool			ft_arrayext(t_array *array, int need);
+void			ft_arrayext(t_array *array, int need);
 
 /*
 ** Store pointers paired with a t_string 'key'
@@ -183,19 +191,19 @@ void			ft_pairsort(t_array *array);
 */
 t_string		*ft_stringnew(void);
 t_string		*ft_stringnews(char *s);
-t_bool			ft_stringaddc(t_string *str, char c);
-t_bool			ft_stringadd(t_string *str, char *add);
-t_bool			ft_stringaddi(t_string *str, int nbr);
-t_bool			ft_stringaddl(t_string *str, char *add, int len);
-t_bool			ft_stringaddcn(t_string *str, char c, int n);
-t_bool			ft_stringsetc(t_string *str, char c, int index);
-t_bool			ft_stringset(t_string *str, char *set, int index);
-t_bool			ft_stringsetl(t_string *str, char *set, int index, int len);
-t_bool			ft_stringinsc(t_string *str, char c, int index);
-t_bool			ft_stringins(t_string *str, char *ins, int index);
-t_bool			ft_stringinsl(t_string *str, char *ins, int index, int len);
+void			ft_stringaddc(t_string *str, char c);
+void			ft_stringadd(t_string *str, char *add);
+void			ft_stringaddi(t_string *str, int nbr);
+void			ft_stringaddl(t_string *str, char *add, int len);
+void			ft_stringaddcn(t_string *str, char c, int n);
+void			ft_stringsetc(t_string *str, char c, int index);
+void			ft_stringset(t_string *str, char *set, int index);
+void			ft_stringsetl(t_string *str, char *set, int index, int len);
+void			ft_stringinsc(t_string *str, char c, int index);
+void			ft_stringins(t_string *str, char *ins, int index);
+void			ft_stringinsl(t_string *str, char *ins, int index, int len);
 void			ft_stringrepc(t_string *str, char c, char r);
-t_bool			ft_stringrep(t_string *str, char *chr, char *rep);
+void			ft_stringrep(t_string *str, char *chr, char *rep);
 t_string		*ft_stringdup(t_string *str);
 t_string		*ft_stringsub(t_string *str, int index, int len);
 void			ft_stringrem(t_string *str, int index, int len);
@@ -204,10 +212,10 @@ t_array			*ft_stringsplit(t_string *str, char *chr);
 t_array			*ft_stringsplitc(t_string *str, char c);
 int				ft_stringchr(t_string *str, char c);
 int				ft_stringstr(t_string *str, char *chr, int start);
-t_bool			ft_stringfree(t_string *str);
+void			ft_stringfree(t_string *str);
 void			ft_stringclr(t_string *str);
 void			ft_stringkil(void *str);
-t_bool			ft_stringext(t_string *str, int need);
+void			ft_stringext(t_string *str, int need);
 int				ft_stringput(t_string *str);
 int				ft_stringputfd(t_string *str, int const fd);
 
