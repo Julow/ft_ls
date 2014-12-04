@@ -27,14 +27,11 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 		ft_stringaddc(file->path, '/');
 	ft_stringadd(file->path, name);
 	file->dir = dir;
+	file->name = NULL;
 	if (lstat(file->path->content, file->stats) < 0)
 	{
-		ft_putstr_fd("ft_ls: ", 2);
-		ft_stringputfd(file->path, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		ft_stringkil(file->path);
-		ft_gbfree(file);
+		print_errno(name);
+		kill_file(file);
 		return (NULL);
 	}
 	file->name = get_name(file, name, args);
@@ -56,8 +53,8 @@ static void		ls_args(t_array *files, t_array *dirs, t_array *errs,
 			return ((void)ft_arrayadd(errs, ft_pairnew((args->args[i][0] ==
 				'\0') ? "fts_open" : args->args[i], strerror(errno))));
 		tmp = filenew(args->args[i], "", dir, args);
-		if (dir != NULL && (!FLAG(FLAG_L) || (tmp->stats->st_mode & S_IFMT) !=
-			S_IFLNK))
+		if (dir != NULL && !FLAG(FLAG_D) && (!FLAG(FLAG_L) ||
+			(tmp->stats->st_mode & S_IFMT) != S_IFLNK))
 			ft_arrayadd(dirs, tmp);
 		else
 			ft_arrayadd(files, tmp);

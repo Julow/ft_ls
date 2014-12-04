@@ -96,7 +96,8 @@ void			kill_file(void *file)
 	t_file			*tmp;
 
 	tmp = (t_file*)file;
-	ft_stringkil(tmp->name);
+	if (tmp->name != NULL)
+		ft_stringkil(tmp->name);
 	ft_stringkil(tmp->path);
 	ft_gbfree(tmp->stats);
 	if (tmp->dir != NULL)

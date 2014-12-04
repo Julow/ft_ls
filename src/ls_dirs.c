@@ -36,7 +36,13 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 		tmp->path = ft_stringdup(file->path);
 		tmp->dir = opendir(file->path->content);
 		tmp->stats = MAL1(struct stat);
-		ft_arrayadd(dirs, tmp);
+		if (lstat(tmp->path->content, tmp->stats) < 0)
+		{
+			print_errno(ent->d_name);
+			kill_file(tmp);
+		}
+		else
+			ft_arrayadd(dirs, tmp);
 	}
 }
 

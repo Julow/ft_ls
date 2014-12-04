@@ -33,7 +33,7 @@
 # define FLAG_L		((1) | FLAG_1)
 # define FLAG_A		((1 << 1) | FLAG_AA)
 # define FLAG_AA	(1 << 2)
-# define FLAG_D		(1 << 3)
+# define FLAG_D		(1 << 3 | FLAG_A)
 # define FLAG_1 	(1 << 4)
 # define FLAG_RR 	(1 << 5)
 # define FLAG_R 	(1 << 6)
@@ -79,6 +79,7 @@ typedef struct	s_argv
 /*
 ** ls_errs.c
 */
+void			print_errno(char *name);
 void			ls_errs(t_array *errs, t_args *args);
 
 /*
