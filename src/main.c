@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 {

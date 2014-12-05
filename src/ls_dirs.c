@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 static void		write_total(int total)
 {

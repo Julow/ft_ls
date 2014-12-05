@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 t_string		*ft_stringi(int n)
 {
@@ -71,8 +72,8 @@ t_string		*get_time(time_t m_time)
 		ft_stringaddl(tmp, split[3], 5);
 	i = -1;
 	while (split[++i] != NULL)
-		ft_gbfree(split[i]);
-	ft_gbfree(split);
+		free(split[i]);
+	free(split);
 	return (tmp);
 }
 

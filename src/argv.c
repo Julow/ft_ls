@@ -46,7 +46,7 @@ static void		add_arg(t_args *targs, char *add)
 		targs->args[i] = tmp[i];
 		i++;
 	}
-	ft_gbfree(tmp);
+	free(tmp);
 	targs->args[i] = ft_strdup(add);
 	targs->args[i + 1] = NULL;
 	targs->args_count++;
@@ -74,7 +74,6 @@ static void		read_flags(t_args *args, char *str, char *arg0)
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
 			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglnortu1] [file ...]\n", 2);
-			ft_gbclear();
 			exit(2);
 		}
 	}
@@ -86,9 +85,9 @@ void			kill_args(t_args **args)
 
 	i = -1;
 	while (++i < (*args)->args_count)
-		ft_gbfree((*args)->args[i]);
-	ft_gbfree((*args)->args);
-	ft_gbfree(*args);
+		free((*args)->args[i]);
+	free((*args)->args);
+	free(*args);
 	*args = NULL;
 }
 

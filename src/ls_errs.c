@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 static void		kill_err(void *err)
 {
 	ft_stringkil(((t_pair*)err)->key);
-	ft_gbfree(err);
+	free(err);
 }
 
 void			print_errno(char *name)

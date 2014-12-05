@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 static int		get_line_count(t_array *table)
 {
@@ -30,7 +31,7 @@ static int		get_line_count(t_array *table)
 void			kill_col(void *col)
 {
 	ft_arraykil(((t_col*)col)->lines, &ft_stringkil);
-	ft_gbfree(col);
+	free(col);
 }
 
 void			col_add(t_col *col, t_string *str)

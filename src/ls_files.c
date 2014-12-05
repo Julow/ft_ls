@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdlib.h>
 
 static t_string	*get_modes(char *n, mode_t mode)
 {
@@ -99,10 +100,10 @@ void			kill_file(void *file)
 	if (tmp->name != NULL)
 		ft_stringkil(tmp->name);
 	ft_stringkil(tmp->path);
-	ft_gbfree(tmp->stats);
+	free(tmp->stats);
 	if (tmp->dir != NULL)
 		closedir(tmp->dir);
-	ft_gbfree(tmp);
+	free(tmp);
 }
 
 void			ls_files(t_array *files, t_args *args)
