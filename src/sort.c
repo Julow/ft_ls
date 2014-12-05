@@ -12,21 +12,23 @@
 
 #include "ft_ls.h"
 
-static t_time	get_value(t_file *file, t_args *args)
+static t_long	get_value(t_file *file, t_args *args)
 {
 	if (FLAG(FLAG_U))
-		return (file->stats->st_atimespec);
+		return ((t_long)file->stats->st_atimespec.tv_sec);
 	if (FLAG(FLAG_UU))
-		return (file->stats->st_birthtimespec);
-	return (file->stats->st_mtimespec);
+		return ((t_long)file->stats->st_birthtimespec.tv_sec);
+	if (FLAG(FLAG_SS))
+		return ((t_long)file->stats->st_size);
+	return ((t_long)file->stats->st_mtimespec.tv_sec);
 }
 
 void			filesort_t(t_array *files, t_args *args)
 {
 	int				i;
 	int				j;
-	t_time			tmp1;
-	t_time			tmp2;
+	t_long			tmp1;
+	t_long			tmp2;
 
 	i = -1;
 	while (++i < files->length)
@@ -36,10 +38,10 @@ void			filesort_t(t_array *files, t_args *args)
 		{
 			tmp1 = get_value((t_file*)files->data[i], args);
 			tmp2 = get_value((t_file*)files->data[j], args);
-			if ((tmp1.tv_sec == tmp2.tv_sec &&
+			if ((tmp1 == tmp2 &&
 				ft_strcmp(((t_file*)files->data[i])->name->content,
 				((t_file*)files->data[j])->name->content) > 0) ||
-				(tmp1.tv_sec != tmp2.tv_sec && tmp1.tv_sec < tmp2.tv_sec))
+				(tmp1 != tmp2 && tmp1 < tmp2))
 				ft_arrayswap(files, i, j);
 		}
 	}

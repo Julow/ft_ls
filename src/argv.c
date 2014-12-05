@@ -21,15 +21,17 @@ int				g_flags[] = {
 	'r', FLAG_R, 0,
 	'l', FLAG_L, FLAG_1,
 	'F', FLAG_FF, 0,
-	't', FLAG_T, FLAG_UU | FLAG_U | FLAG_SS,
+	't', FLAG_T, FLAG_UU | FLAG_U | FLAG_SS | FLAG_C,
 	'g', FLAG_G, FLAG_1,
 	'o', FLAG_O, FLAG_1,
 	'R', FLAG_RR, 0,
-	'u', FLAG_U, FLAG_SS | FLAG_UU | FLAG_T,
-	'U', FLAG_UU, FLAG_SS | FLAG_U | FLAG_T,
+	'u', FLAG_U, FLAG_SS | FLAG_UU | FLAG_T | FLAG_C,
+	'U', FLAG_UU, FLAG_SS | FLAG_U | FLAG_T | FLAG_C,
 	'n', FLAG_N, 0,
 	'd', FLAG_D, 0,
-	'S', FLAG_SS, FLAG_UU | FLAG_U | FLAG_T,
+	'S', FLAG_SS, FLAG_UU | FLAG_U | FLAG_T | FLAG_C,
+	'c', FLAG_C, FLAG_SS | FLAG_UU | FLAG_U | FLAG_T,
+	'p', FLAG_P, 0,
 	0
 };
 
@@ -73,7 +75,7 @@ static void		read_flags(t_args *args, char *str, char *arg0)
 			ft_putstr_fd(arg0, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
-			ft_putstr_fd("\nusage: ft_ls [-AFRUadfglnortu1] [file ...]\n", 2);
+			ft_putstr_fd("\nusage: ft_ls [-AFRUacdfglnoprtu1] [file ...]\n", 2);
 			exit(2);
 		}
 	}

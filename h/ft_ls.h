@@ -46,6 +46,8 @@
 # define FLAG_O		(1 << 14 | FLAG_L)
 # define FLAG_N		(1 << 15 | FLAG_L)
 # define FLAG_SS	(1 << 16 | FLAG_SORT)
+# define FLAG_C		(1 << 17 | FLAG_SORT)
+# define FLAG_P		(1 << 18)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))
