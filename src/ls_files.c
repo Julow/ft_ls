@@ -102,7 +102,7 @@ void			kill_file(void *file)
 	ft_stringkil(tmp->path);
 	free(tmp->stats);
 	if (tmp->dir != NULL)
-		closedir(tmp->dir);
+		closedir(tmp->dir); // move to ls_dir
 	free(tmp);
 }
 
@@ -121,8 +121,6 @@ void			ls_files(t_array *files, t_args *args)
 	table = init_table(8);
 	while (++i < files->length)
 	{
-		if (hide_file(files, &i, args))
-			continue ;
 		if (FLAG(FLAG_1))
 			ls_file1(table, (t_file*)files->data[i], args);
 		while (((t_file*)files->data[i])->name->length >= max_len)

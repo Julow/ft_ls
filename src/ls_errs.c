@@ -19,12 +19,12 @@ static void		kill_err(void *err)
 	free(err);
 }
 
-void			print_errno(char *name)
+void			print_errno(char *name, int no)
 {
 	ft_putstr_fd("ft_ls: ", 2);
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror(errno), 2);
+	ft_putendl_fd(strerror(no), 2);
 }
 
 void			ls_errs(t_array *errs, t_args *args)

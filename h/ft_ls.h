@@ -67,6 +67,7 @@ typedef struct	s_file
 	t_string		*path;
 	DIR				*dir;
 	struct stat		*stats;
+	int				err;
 }				t_file;
 
 typedef struct	s_argv
@@ -79,7 +80,7 @@ typedef struct	s_argv
 /*
 ** ls_errs.c
 */
-void			print_errno(char *name);
+void			print_errno(char *name, int no);
 void			ls_errs(t_array *errs, t_args *args);
 
 /*
@@ -111,8 +112,8 @@ t_args			*get_args(int argc, char **argv);
 */
 t_string		*ft_stringi(int n);
 t_string		*get_name(t_file *file, char *name, t_args *args);
+t_bool			is_visible(t_string *name, t_args *args);
 t_string		*get_time(time_t m_time);
-t_bool			hide_file(t_array *files, int *i, t_args *args);
 
 t_string		*get_pwuid(uid_t id, t_args *args);
 t_string		*get_grgid(uid_t id, t_args *args);

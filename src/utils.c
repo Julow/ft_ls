@@ -49,6 +49,13 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 	return (str);
 }
 
+t_bool			is_visible(t_string *name, t_args *args)
+{
+	return (((FLAG(FLAG_AA) || !(name->content[0] == '.'))
+		&& (FLAG(FLAG_A) || (!ft_strequ(name->content, ".") &&
+			!ft_strequ(name->content, "..")))) ? TRUE : FALSE);
+}
+
 t_string		*get_time(time_t m_time)
 {
 	time_t			now;
@@ -76,7 +83,7 @@ t_string		*get_time(time_t m_time)
 	free(split);
 	return (tmp);
 }
-
+/*
 t_bool			hide_file(t_array *files, int *i, t_args *args)
 {
 	t_file			*tmp;
@@ -92,3 +99,4 @@ t_bool			hide_file(t_array *files, int *i, t_args *args)
 	}
 	return (FALSE);
 }
+*/

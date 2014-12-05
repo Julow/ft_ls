@@ -36,10 +36,11 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 		tmp->name = ft_stringdup(file->name);
 		tmp->path = ft_stringdup(file->path);
 		tmp->dir = opendir(file->path->content);
+		tmp->err = errno;
 		tmp->stats = MAL1(struct stat);
 		if (lstat(tmp->path->content, tmp->stats) < 0)
 		{
-			print_errno(ent->d_name);
+			print_errno(ent->d_name, errno);
 			kill_file(tmp);
 		}
 		else
@@ -61,15 +62,16 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 	while (dir->dir != NULL && (ent = readdir(dir->dir)) != NULL)
 	{
 		tmp = filenew(ent->d_name, dir->path->content, NULL, args);
-		total += ((FLAG(FLAG_AA) || !(tmp->name->content[0] == '.')) &&
-			(FLAG(FLAG_A) || (!ft_strequ(tmp->name->content, ".") &&
-			!ft_strequ(tmp->name->content, "..")))) ? tmp->stats->st_blocks : 0;
-		ft_arrayadd(files, tmp);
+		total += (is_visible(tmp->name, args)) ? tmp->stats->st_blocks : 0;
+		if (is_visible(tmp->name, args))
+			ft_arrayadd(files, tmp);
 		check_dirent(ent, dirs, tmp, args);
 	}
-	if (FLAG(FLAG_L))
+	if (FLAG(FLAG_L) && files->length > 0 && (is_visible(dir->name, args)
+		|| ft_strequ(dir->name->content, ".")))
 		write_total(total);
-	ls_files(files, args);
+	if (is_visible(dir->name, args) || ft_strequ(dir->name->content, "."))
+		ls_files(files, args);
 	ft_arraykil(files, &kill_file);
 	if (FLAG(FLAG_RR))
 		ls_dirs(dirs, args, 1);
@@ -90,13 +92,15 @@ void			ls_dirs(t_array *dirs, t_args *args, int f)
 	while (++i < dirs->length)
 	{
 		tmp = (t_file*)dirs->data[i];
-		if (args->args_count > 1)
+		if (args->args_count > 1 && is_visible(tmp->name, args))
 		{
 			if (i > 0 || f > 0)
 				ft_putchar('\n');
 			ft_putlstr(tmp->path->content, tmp->path->length);
 			ft_putstr(":\n");
 		}
+		if (tmp->dir == NULL)
+			print_errno(tmp->name->content, tmp->err);
 		ls_dir(tmp, args, NULL);
 	}
 	ft_arraykil(dirs, &kill_file);

@@ -31,7 +31,7 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 	file->name = NULL;
 	if (lstat(file->path->content, file->stats) < 0)
 	{
-		print_errno(name);
+		print_errno(name, errno);
 		kill_file(file);
 		return (NULL);
 	}
@@ -43,6 +43,7 @@ static void		ls_args(t_array *files, t_array *dirs, t_array *errs,
 	t_args *args)
 {
 	int				i;
+	int				e;
 	DIR				*dir;
 	t_file			*tmp;
 
@@ -50,10 +51,12 @@ static void		ls_args(t_array *files, t_array *dirs, t_array *errs,
 	while (++i < args->args_count)
 	{
 		dir = opendir(args->args[i]);
+		e = errno;
 		if (dir == NULL && errno != 20)
 			return ((void)ft_arrayadd(errs, ft_pairnew((args->args[i][0] ==
 				'\0') ? "fts_open" : args->args[i], strerror(errno))));
 		tmp = filenew(args->args[i], "", dir, args);
+		tmp->err = e;
 		if (dir != NULL && !FLAG(FLAG_D) && (!FLAG(FLAG_L) ||
 			(tmp->stats->st_mode & S_IFMT) != S_IFLNK))
 			ft_arrayadd(dirs, tmp);
