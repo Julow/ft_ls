@@ -12,8 +12,8 @@
 
 #include "libft.h"
 #include "get_next_line.h"
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static t_gnl	*gnl_getgnl(int const fd)
 {
