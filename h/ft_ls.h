@@ -47,7 +47,7 @@
 # define FLAG_N		(1 << 15 | FLAG_L)
 # define FLAG_SS	(1 << 16 | FLAG_SORT)
 # define FLAG_C		(1 << 17 | FLAG_SORT)
-# define FLAG_P		(1 << 18)
+# define FLAG_P		(1 << 19)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))
@@ -65,6 +65,7 @@ typedef struct	s_col
 
 typedef struct	s_file
 {
+	char			*real;
 	t_string		*name;
 	t_string		*path;
 	DIR				*dir;
@@ -114,7 +115,7 @@ t_args			*get_args(int argc, char **argv);
 */
 t_string		*ft_stringi(int n);
 t_string		*get_name(t_file *file, char *name, t_args *args);
-t_bool			is_visible(t_string *name, t_args *args);
+t_bool			is_visible(char *name, t_args *args);
 t_string		*get_time(time_t m_time);
 
 t_string		*get_pwuid(uid_t id, t_args *args);

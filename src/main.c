@@ -36,6 +36,7 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 		return (NULL);
 	}
 	file->name = get_name(file, name, args);
+	file->real = name;
 	return ((void*)file);
 }
 

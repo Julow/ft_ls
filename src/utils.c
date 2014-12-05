@@ -31,7 +31,7 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 
 	str = ft_stringnew();
 	ft_stringadd(str, name);
-	if (FLAG(FLAG_FF) || FLAG(FLAG_P))
+	if ((FLAG(FLAG_FF) || FLAG(FLAG_P)) && mode == S_IFDIR)
 		ft_stringaddc(str, '/');
 	else if (FLAG(FLAG_FF) && (mode == S_IFIFO || mode == S_IFSOCK))
 		ft_stringaddc(str, (mode == S_IFIFO) ? '|' : '=');
@@ -49,11 +49,11 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 	return (str);
 }
 
-t_bool			is_visible(t_string *name, t_args *args)
+t_bool			is_visible(char *name, t_args *args)
 {
-	return (((FLAG(FLAG_AA) || !(name->content[0] == '.' && name->content[1] != '/'))
-		&& (FLAG(FLAG_A) || (!ft_strequ(name->content, ".") &&
-			!ft_strequ(name->content, "..")))) ? TRUE : FALSE);
+	return (((FLAG(FLAG_AA) || !(name[0] == '.' && name[1] != '/'))
+		&& (FLAG(FLAG_A) || (!ft_strequ(name, ".") &&
+			!ft_strequ(name, "..")))) ? TRUE : FALSE);
 }
 
 t_string		*get_time(time_t m_time)
