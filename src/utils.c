@@ -51,7 +51,7 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 
 t_bool			is_visible(t_string *name, t_args *args)
 {
-	return (((FLAG(FLAG_AA) || !(name->content[0] == '.'))
+	return (((FLAG(FLAG_AA) || !(name->content[0] == '.' && name->content[1] != '/'))
 		&& (FLAG(FLAG_A) || (!ft_strequ(name->content, ".") &&
 			!ft_strequ(name->content, "..")))) ? TRUE : FALSE);
 }
