@@ -58,8 +58,7 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 			-3 : -1;
 		col_add((t_col*)table->data[5], get_minor(file->stats));
 		((t_col*)table->data[5])->left = 0;
-		col_add((t_col*)table->data[6],
-			get_time(file->stats->st_mtimespec.tv_sec));
+		col_add((t_col*)table->data[6], get_time(file, args));
 		col_add((t_col*)table->data[7], ft_stringdup(file->name));
 	}
 	else
@@ -112,7 +111,7 @@ void			ls_files(t_array *files, t_args *args)
 	int				max_len;
 	t_array			*table;
 
-	if ((max_len = 8) == 8 && FLAG(FLAG_SORT))
+	if ((max_len = 8) == 8 && (FLAG(FLAG_T) || FLAG(FLAG_SS)))
 		filesort_t(files, args);
 	else if (!FLAG(FLAG_F))
 		filesort(files);

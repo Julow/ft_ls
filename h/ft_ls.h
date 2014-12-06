@@ -29,7 +29,6 @@
 
 # define MONTH(m)	((m) * 30 * 24 * 60 * 60)
 
-# define FLAG_SORT	(1 << 31)
 # define FLAG_L		((1) | FLAG_1)
 # define FLAG_A		((1 << 1) | FLAG_AA)
 # define FLAG_AA	(1 << 2)
@@ -37,17 +36,18 @@
 # define FLAG_1 	(1 << 4)
 # define FLAG_RR 	(1 << 5)
 # define FLAG_R 	(1 << 6)
-# define FLAG_T 	((1 << 7) | FLAG_SORT)
+# define FLAG_T 	((1 << 7))
 # define FLAG_F		((1 << 8) | FLAG_A)
-# define FLAG_U		((1 << 9) | FLAG_SORT)
-# define FLAG_UU	((1 << 10) | FLAG_SORT)
+# define FLAG_U		((1 << 9))
+# define FLAG_UU	((1 << 10))
 # define FLAG_G		(1 << 11 | FLAG_L)
 # define FLAG_FF	(1 << 12)
 # define FLAG_O		(1 << 14 | FLAG_L)
 # define FLAG_N		(1 << 15 | FLAG_L)
-# define FLAG_SS	(1 << 16 | FLAG_SORT)
-# define FLAG_C		(1 << 17 | FLAG_SORT)
+# define FLAG_SS	(1 << 16)
+# define FLAG_C		(1 << 17)
 # define FLAG_P		(1 << 19)
+# define FLAG_TT	(1 << 20)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))
@@ -116,7 +116,7 @@ t_args			*get_args(int argc, char **argv);
 t_string		*ft_stringi(int n);
 t_string		*get_name(t_file *file, char *name, t_args *args);
 t_bool			is_visible(char *name, t_args *args);
-t_string		*get_time(time_t m_time);
+t_string		*get_time(t_file *file, t_args *args);
 
 t_string		*get_pwuid(uid_t id, t_args *args);
 t_string		*get_grgid(uid_t id, t_args *args);

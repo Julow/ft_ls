@@ -82,7 +82,7 @@ void			ls_dirs(t_array *dirs, t_args *args, int f)
 	int				i;
 	t_file			*tmp;
 
-	if (FLAG(FLAG_SORT))
+	if (FLAG(FLAG_T) || FLAG(FLAG_SS))
 		filesort_t(dirs, args);
 	else if (!FLAG(FLAG_F))
 		filesort(dirs);

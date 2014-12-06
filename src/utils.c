@@ -56,7 +56,7 @@ t_bool			is_visible(char *name, t_args *args)
 			!ft_strequ(name, "..")))) ? TRUE : FALSE);
 }
 
-t_string		*get_time(time_t m_time)
+static t_string	*format_time(time_t m_time, t_args *args)
 {
 	time_t			now;
 	char			**split;
@@ -70,33 +70,27 @@ t_string		*get_time(time_t m_time)
 	ft_stringaddcn(tmp, ' ', (ft_strlen(split[2]) == 1) ? 2 : 1);
 	ft_stringadd(tmp, split[2]);
 	ft_stringaddc(tmp, ' ');
-	if (m_time <= now - MONTH(6) || m_time > now)
+	if (m_time > now - MONTH(6) && m_time <= now)
+		ft_stringaddl(tmp, split[3], (FLAG(FLAG_TT)) ? 8 : 5);
+	if (m_time <= now - MONTH(6) || m_time > now || FLAG(FLAG_TT))
 	{
 		ft_stringaddc(tmp, ' ');
 		ft_stringaddl(tmp, split[4], 4);
 	}
-	else
-		ft_stringaddl(tmp, split[3], 5);
 	i = -1;
 	while (split[++i] != NULL)
 		free(split[i]);
 	free(split);
 	return (tmp);
 }
-/*
-t_bool			hide_file(t_array *files, int *i, t_args *args)
-{
-	t_file			*tmp;
 
-	tmp = (t_file*)files->data[*i];
-	if ((!FLAG(FLAG_AA) && (tmp->name->content[0] == '.')) || (!FLAG(FLAG_A)
-		&& (ft_strequ(tmp->name->content, ".") ||
-			ft_strequ(tmp->name->content, ".."))))
-	{
-		kill_file(files->data[*i]);
-		ft_arrayrem(files, (*i)--);
-		return (TRUE);
-	}
-	return (FALSE);
+t_string		*get_time(t_file *file, t_args *args)
+{
+	if (FLAG(FLAG_U))
+		return (format_time(file->stats->st_atimespec.tv_sec, args));
+	if (FLAG(FLAG_UU))
+		return (format_time(file->stats->st_birthtimespec.tv_sec, args));
+	if (FLAG(FLAG_C))
+		return (format_time(file->stats->st_ctimespec.tv_sec, args));
+	return (format_time(file->stats->st_mtimespec.tv_sec, args));
 }
-*/
