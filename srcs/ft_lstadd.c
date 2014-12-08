@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_lst.h"
+#include "libft.h"
 
-void			ft_lstadd(t_list **alst, t_list *add)
+void			ft_lstadd(t_lst **alst, t_lst *add)
 {
 	add->next = *alst;
 	*alst = add;

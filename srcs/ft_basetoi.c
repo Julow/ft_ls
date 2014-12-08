@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   srcs/ft_basetoi.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/05 15:06:50 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/05 15:06:51 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/07 23:54:45 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/07 23:54:45 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void			ft_lstdelone(t_lst **alst, void (*f)(void*))
+t_long			ft_basetoi(char *str, char *base)
 {
-	if (alst == NULL || *alst == NULL)
-		return ;
-	f((*alst)->data);
-	free(*alst);
-	*alst = NULL;
+	int				i;
+	int				base_len;
+	t_long			nb;
+
+	base_len = ft_strlen(base);
+	nb = 0;
+	i = (str[0] == '-' && ft_strchri(base, '-') == -1) ? 0 : -1;
+	while (str[++i] != '\0')
+	{
+		nb *= base_len;
+		nb += ft_strchri(base, str[i]);
+	}
+	if (str[0] == '-' && ft_strchri(base, '-') == -1)
+		nb *= -1;
+	return (nb);
 }
