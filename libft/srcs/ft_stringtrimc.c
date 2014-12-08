@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   srcs/ft_stringtrimc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/05 15:06:50 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/05 15:06:51 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/07 15:28:48 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/07 15:28:48 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void			ft_lstdelone(t_lst **alst, void (*f)(void*))
+void			ft_stringtrimc(t_string *str, char *trim)
 {
-	if (alst == NULL || *alst == NULL)
-		return ;
-	f((*alst)->data);
-	free(*alst);
-	*alst = NULL;
+	int				i;
+
+	i = str->length - 1;
+	while (i >= 0 && ft_strchri(trim, str->content[i]) != -1)
+		i--;
+	i++;
+	ft_stringrem(str, i, str->length - i);
+	i = 0;
+	while (ft_strchri(trim, str->content[i]) != -1)
+		i++;
+	ft_stringrem(str, 0, i);
 }

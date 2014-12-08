@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   srcs/ft_atol.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/05 15:06:50 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/05 15:06:51 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/07 23:56:18 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/07 23:56:18 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void			ft_lstdelone(t_lst **alst, void (*f)(void*))
+t_long			ft_atol(const char *str)
 {
-	if (alst == NULL || *alst == NULL)
-		return ;
-	f((*alst)->data);
-	free(*alst);
-	*alst = NULL;
+	t_long			nb;
+	t_bool			negatif;
+
+	negatif = FALSE;
+	nb = 0;
+	while (ft_iswhite(*str))
+		str++;
+	if (*str == '-')
+	{
+		negatif = TRUE;
+		str++;
+	}
+	else if (*str == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+		nb = nb * 10 + (*(str++) - '0');
+	return ((negatif) ? -nb : nb);
 }

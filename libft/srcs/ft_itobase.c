@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stringnew.c                                     :+:      :+:    :+:   */
+/*   srcs/ft_itobase.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/15 16:58:45 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/15 17:15:30 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/07 23:53:57 by jaguillo          #+#    #+#             */
+/*   Updated: 2014/12/07 23:53:57 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_string		*ft_stringnew(void)
+char			*ft_itobase(t_long nb, char *base)
 {
-	t_string		*str;
+	int				base_len;
+	char			*str;
+	int				i;
+	t_long			tmp;
 
-	str = MAL1(t_string);
-	if (str != NULL)
+	base_len = ft_strlen(base);
+	if (nb == 0 || base_len == 0)
+		return (ft_strdup("0"));
+	tmp = nb;
+	i = (nb < 0) ? 2 : 1;
+	while ((tmp /= base_len) != 0)
+		i++;
+	str = MAL(char, i);
+	str[i] = '\0';
+	tmp = nb;
+	while (--i >= 0)
 	{
-		str->content = MAL(char, 1);
-		if (str->content != NULL)
-			str->content[0] = '\0';
-		str->length = 0;
-		str->alloc_length = (str->content == NULL) ? 0 : 1;
+		str[i] = base[((nb < 0) ? -(tmp % base_len) : tmp % base_len)];
+		tmp /= base_len;
 	}
+	if (nb < 0)
+		str[0] = '-';
 	return (str);
 }

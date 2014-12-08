@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   srcs/ft_malloc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juloo <juloo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/11/05 15:06:50 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/05 15:06:51 by jaguillo         ###   ########.fr       */
+/*   Created: 2014/12/07 15:39:27 by juloo             #+#    #+#             */
+/*   Updated: 2014/12/07 15:39:27 by juloo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-void			ft_lstdelone(t_lst **alst, void (*f)(void*))
+void			*ft_malloc(t_uint size)
 {
-	if (alst == NULL || *alst == NULL)
-		return ;
-	f((*alst)->data);
-	free(*alst);
-	*alst = NULL;
+	void			*tmp;
+
+	tmp = malloc(size);
+	if (tmp == NULL)
+	{
+		ft_putstr_fd("Memory error: Not enough memory\n", 2);
+		exit(1);
+	}
+	return (tmp);
 }
