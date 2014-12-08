@@ -28,7 +28,7 @@ static t_bool	file_cmp(t_file *f1, t_file *f2, t_args *args)
 		f2->stats->st_ctimespec.tv_sec) ? TRUE : FALSE);
 	else if (FLAG(FLAG_SS) && f1->stats->st_size != f2->stats->st_size)
 		return ((f1->stats->st_size < f2->stats->st_size) ? TRUE : FALSE);
-	else if (FLAG(FLAG_T) && (args->flags & (FLAG_U | FLAG_UU | FLAG_C)) == 0  &&
+	else if (FLAG(FLAG_T) && (args->flags & (FLAG_U | FLAG_UU | FLAG_C)) == 0 &&
 		f1->stats->st_mtimespec.tv_sec != f2->stats->st_mtimespec.tv_sec)
 		return ((f1->stats->st_mtimespec.tv_sec <
 		f2->stats->st_mtimespec.tv_sec) ? TRUE : FALSE);

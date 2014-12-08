@@ -52,16 +52,6 @@
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))
 
-# ifdef MAL_EXIT
-#  undef MAL_EXIT
-# endif
-# define MAL_EXIT	2
-
-# ifdef MAL_STRERR
-#  undef MAL_STRERR
-# endif
-# define MAL_STRERR	("ft_ls: memory error: Not enough memory\n")
-
 typedef struct timespec		t_time;
 
 typedef struct stat			t_stat;
