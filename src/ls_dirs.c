@@ -38,13 +38,8 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 		tmp->real = ent->d_name;
 		tmp->err = errno;
 		tmp->stats = MAL1(struct stat);
-		if (lstat(tmp->path->content, tmp->stats) < 0)
-		{
-			print_errno(ent->d_name, errno);
-			kill_file(tmp);
-		}
-		else
-			ft_arrayadd(dirs, tmp);
+		ft_memmove(tmp->stats, file->stats, sizeof(struct stat));
+		ft_arrayadd(dirs, tmp);
 	}
 }
 
@@ -67,13 +62,13 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 			ft_arrayadd(files, tmp);
 		check_dirent(ent, dirs, tmp, args);
 	}
-	if (FLAG(FLAG_L) && files->length > 0 && (is_visible(dir->real, args)
-		|| ft_strequ(dir->real, ".")))
+	if (FLAG(FLAG_L) && files->length > 0 && (is_visible(dir->real, args) ||
+		ft_strequ(dir->real, ".")))
 		write_total(total);
 	if (is_visible(dir->real, args) || ft_strequ(dir->real, "."))
 		ls_files(files, args);
 	ft_arraykil(files, &kill_file);
-	if (FLAG(FLAG_RR))
+	if ((dir->dir != NULL && closedir(dir->dir) > 0 && FALSE) || FLAG(FLAG_RR))
 		ls_dirs(dirs, args, 1);
 }
 

@@ -29,7 +29,7 @@ int				g_flags[] = {
 	'U', FLAG_UU, FLAG_U | FLAG_UU | FLAG_SS | FLAG_C,
 	'n', FLAG_N, 0,
 	'd', FLAG_D, 0,
-	'S', FLAG_SS, FLAG_U | FLAG_UU | FLAG_SS | FLAG_C,
+	'S', FLAG_SS, FLAG_T,
 	'c', FLAG_C, FLAG_U | FLAG_UU | FLAG_SS | FLAG_C,
 	'p', FLAG_P, 0,
 	'T', FLAG_TT, 0,
@@ -76,7 +76,8 @@ static void		read_flags(t_args *args, char *str, char *arg0)
 			ft_putstr_fd(arg0, 2);
 			ft_putstr_fd(": illegal option -- ", 2);
 			ft_putchar_fd(*str, 2);
-			ft_putstr_fd("\nusage: ft_ls [-AFRTUacdfglnoprtu1] [file ...]\n", 2);
+			ft_putstr_fd("\nusage: ft_ls [-AFRSTUacdfglnoprtu1] [file ...]\n",
+				2);
 			exit(2);
 		}
 	}

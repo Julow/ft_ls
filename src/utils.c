@@ -52,8 +52,8 @@ t_string		*get_name(t_file *file, char *name, t_args *args)
 t_bool			is_visible(char *name, t_args *args)
 {
 	return (((FLAG(FLAG_AA) || !(name[0] == '.' && name[1] != '/'))
-		&& (FLAG(FLAG_A) || (!ft_strequ(name, ".") &&
-			!ft_strequ(name, "..")))) ? TRUE : FALSE);
+	&& (FLAG(FLAG_A) || (!ft_strequ(name, ".") &&
+	!ft_strequ(name, "..")))) ? TRUE : FALSE);
 }
 
 static t_string	*format_time(time_t m_time, t_args *args)

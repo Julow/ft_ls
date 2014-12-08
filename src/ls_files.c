@@ -100,8 +100,6 @@ void			kill_file(void *file)
 		ft_stringkil(tmp->name);
 	ft_stringkil(tmp->path);
 	free(tmp->stats);
-	if (tmp->dir != NULL)
-		closedir(tmp->dir); // move to ls_dir
 	free(tmp);
 }
 

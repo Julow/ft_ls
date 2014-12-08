@@ -24,7 +24,8 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 	while (file->path->length > 1 &&
 		file->path->content[file->path->length - 1] == '/')
 		ft_stringrem(file->path, file->path->length - 1, 1);
-	if (file->path->length > 0)
+	if (file->path->length > 0 && name[0] != '/' &&
+		file->path->content[file->path->length - 1] != '/')
 		ft_stringaddc(file->path, '/');
 	ft_stringadd(file->path, name);
 	file->dir = dir;
@@ -55,7 +56,7 @@ static void		ls_args(t_array *files, t_array *dirs, t_array *errs,
 		e = errno;
 		if (dir == NULL && errno != 20)
 			return ((void)ft_arrayadd(errs, ft_pairnew((args->args[i][0] ==
-				'\0') ? "fts_open" : args->args[i], strerror(errno))));
+			'\0') ? "fts_open" : args->args[i], strerror(errno))));
 		tmp = filenew(args->args[i], "", dir, args);
 		tmp->err = e;
 		if (dir != NULL && !FLAG(FLAG_D) && (!FLAG(FLAG_L) ||

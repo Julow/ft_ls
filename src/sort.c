@@ -14,36 +14,25 @@
 
 static t_bool	file_cmp(t_file *f1, t_file *f2, t_args *args)
 {
-	if (FLAG(FLAG_T) && FLAG(FLAG_U))
-	{
-		if (f1->stats->st_atimespec.tv_sec != f2->stats->st_atimespec.tv_sec)
-			return ((f1->stats->st_atimespec.tv_sec <
-				f2->stats->st_atimespec.tv_sec) ? TRUE : FALSE);
-	}
-	else if (FLAG(FLAG_T) && FLAG(FLAG_UU))
-	{
-		if (f1->stats->st_birthtimespec.tv_sec !=
-			f2->stats->st_birthtimespec.tv_sec)
-			return ((f1->stats->st_birthtimespec.tv_sec <
-				f2->stats->st_birthtimespec.tv_sec) ? TRUE : FALSE);
-	}
-	else if (FLAG(FLAG_T) && FLAG(FLAG_C))
-	{
-		if (f1->stats->st_ctimespec.tv_sec != f2->stats->st_ctimespec.tv_sec)
-			return ((f1->stats->st_ctimespec.tv_sec <
-				f2->stats->st_ctimespec.tv_sec) ? TRUE : FALSE);
-	}
-	else if (FLAG(FLAG_SS))
-	{
-		if (f1->stats->st_size != f2->stats->st_size)
-			return ((f1->stats->st_size < f2->stats->st_size) ? TRUE : FALSE);
-	}
-	else if (FLAG(FLAG_T) &&
+	if (FLAG(FLAG_T | FLAG_U) && f1->stats->st_atimespec.tv_sec !=
+		f2->stats->st_atimespec.tv_sec)
+		return ((f1->stats->st_atimespec.tv_sec <
+		f2->stats->st_atimespec.tv_sec) ? TRUE : FALSE);
+	else if (FLAG(FLAG_T | FLAG_UU) && f1->stats->st_birthtimespec.tv_sec
+		!= f2->stats->st_birthtimespec.tv_sec)
+		return ((f1->stats->st_birthtimespec.tv_sec <
+		f2->stats->st_birthtimespec.tv_sec) ? TRUE : FALSE);
+	else if (FLAG(FLAG_T | FLAG_C) && f1->stats->st_ctimespec.tv_sec !=
+		f2->stats->st_ctimespec.tv_sec)
+		return ((f1->stats->st_ctimespec.tv_sec <
+		f2->stats->st_ctimespec.tv_sec) ? TRUE : FALSE);
+	else if (FLAG(FLAG_SS) && f1->stats->st_size != f2->stats->st_size)
+		return ((f1->stats->st_size < f2->stats->st_size) ? TRUE : FALSE);
+	else if (FLAG(FLAG_T) && (args->flags & (FLAG_U | FLAG_UU | FLAG_C)) == 0  &&
 		f1->stats->st_mtimespec.tv_sec != f2->stats->st_mtimespec.tv_sec)
 		return ((f1->stats->st_mtimespec.tv_sec <
-			f2->stats->st_mtimespec.tv_sec) ? TRUE : FALSE);
-	return ((ft_strcmp(f1->name->content, f2->name->content) > 0) ? TRUE :
-		FALSE);
+		f2->stats->st_mtimespec.tv_sec) ? TRUE : FALSE);
+	return ((ft_strcmp(f1->name->content, f2->name->content) > 0) ? TRUE : 0);
 }
 
 void			filesort_t(t_array *fls, t_args *args)

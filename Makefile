@@ -26,7 +26,7 @@ O_FILES = $(addprefix $(O_DIR),$(C_FILES:.c=.o))
 
 all:
 	@(if [ "$(DEBUG)" -eq "1" ]; then make -C $(LIBFT) debug; else make -C $(LIBFT); fi || (echo "\033[0;31m$(LIBFT)\033[0;0m" && exit 1)) | grep -v "Nothing to be done" || echo "" > /dev/null
-	@make -j5 $(NAME)
+	@make -j3 $(NAME)
 
 $(NAME): $(O_FILES)
 	@gcc $(FLAGS) -o $@ $(O_FILES) -I$(LIBFT) -L$(LIBFT) -lft && printf "\033[0;32m%-24s\033[1;30m<<--\033[0;0m\n" "$@" || printf "\033[0;31m%-24s\033[1;30m<<--\033[0;0m\n" "$@"
