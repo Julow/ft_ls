@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 19:21:43 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/19 19:21:43 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/07 18:54:40 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ static void		ls_file1(t_array *table, t_file *file, t_args *args)
 			file->stats->st_mode));
 		col_add((t_col*)table->data[1], ft_stringi(file->stats->st_nlink));
 		((t_col*)table->data[1])->left = 0;
-		col_add((t_col*)table->data[2], get_pwuid(file->stats->st_uid, args));
-		((t_col*)table->data[2])->left = 2;
+		col_add((t_col*)table->data[2], (FLAG(FLAG_O) && FLAG(FLAG_G)) ?
+			ft_stringnews(" ") : get_pwuid(file->stats->st_uid, args));
+		((t_col*)table->data[2])->left = (FLAG(FLAG_O) && FLAG(FLAG_G)) ? 1 : 2;
 		col_add((t_col*)table->data[3], get_grgid(file->stats->st_gid, args));
 		((t_col*)table->data[3])->left = 2;
 		col_add((t_col*)table->data[4], get_major(file->stats));
@@ -85,7 +86,7 @@ static void		ls_column(t_array *files, int len, t_file *tmp)
 			tmp = (t_file*)files->data[j * lines + i];
 			ft_putlstr(tmp->name->content, tmp->name->length);
 			if (j + 1 < columns)
-				ft_putnchar(' ', len - tmp->name->length);
+				ft_putnchar('	', (len - tmp->name->length + 7) / 8);
 		}
 		ft_putchar('\n');
 	}

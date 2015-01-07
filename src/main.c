@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 14:50:34 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/12 14:50:34 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/07 19:21:50 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void			*filenew(char *name, char *path, DIR *dir, t_args *args)
 	ft_stringadd(file->path, name);
 	file->dir = dir;
 	file->name = NULL;
-	if (lstat(file->path->content, file->stats) < 0)
+	if (FLAG(FLAG_STAT) && lstat(file->path->content, file->stats) < 0)
 	{
 		print_errno(name, errno);
 		kill_file(file);
 		return (NULL);
 	}
-	file->name = get_name(file, name, args);
 	file->real = name;
+	file->name = get_name(file, name, args);
 	return ((void*)file);
 }
 

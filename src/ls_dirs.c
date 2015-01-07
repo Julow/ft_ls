@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 19:21:31 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/19 19:21:32 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/07 18:29:58 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,31 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 
 static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 {
-	t_array			*files;
+	t_array			files;
 	t_array			*dirs;
 	int				total;
 	struct dirent	*ent;
 
 	total = 0;
-	files = ft_arraynew();
-	ft_arrayext(files, dir->stats->st_nlink);
+	ft_arrayini(&files);
+	ft_arrayext(&files, dir->stats->st_nlink);
 	dirs = (FLAG(FLAG_RR)) ? ft_arraynew() : NULL;
 	while (dir->dir != NULL && (ent = readdir(dir->dir)) != NULL)
 	{
-		tmp = filenew(ent->d_name, dir->path->content, NULL, args);
+		if ((tmp = filenew(ent->d_name, dir->path->content, NULL, args)) == NULL)
+			continue ;
 		total += (is_visible(tmp->real, args)) ? tmp->stats->st_blocks : 0;
 		if (is_visible(tmp->real, args))
-			ft_arrayadd(files, tmp);
+			ft_arrayadd(&files, tmp);
 		check_dirent(ent, dirs, tmp, args);
 	}
-	if (FLAG(FLAG_L) && files->length > 0 && (is_visible(dir->real, args) ||
+	if (FLAG(FLAG_L) && files.length > 0 && (is_visible(dir->real, args) ||
 		ft_strequ(dir->real, ".")))
 		write_total(total);
 	if (is_visible(dir->real, args) || ft_strequ(dir->real, "."))
-		ls_files(files, args);
-	ft_arraykil(files, &kill_file);
+		ls_files(&files, args);
+	ft_arrayclr(&files, &kill_file);
+	free(files.data);
 	if ((dir->dir != NULL && closedir(dir->dir) > 0 && FALSE) || FLAG(FLAG_RR))
 		ls_dirs(dirs, args, 1);
 }

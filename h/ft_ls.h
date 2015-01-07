@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 16:00:24 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/12 16:00:25 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/07 19:13:44 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,27 @@
 
 # define FLAG(m)	((args->flags & (m)) == (m))
 
-# define FLAG_L		((1) | FLAG_1)
-# define FLAG_A		((1 << 1) | FLAG_AA)
+# define FLAG_L		((1) | FLAG_1 | FLAG_STAT)
+# define FLAG_A		(1 << 1)
 # define FLAG_AA	(1 << 2)
-# define FLAG_D		(1 << 3 | FLAG_A)
+# define FLAG_D		(1 << 3)
 # define FLAG_1 	(1 << 4)
 # define FLAG_RR 	(1 << 5)
 # define FLAG_R 	(1 << 6)
-# define FLAG_T 	((1 << 7))
-# define FLAG_F		((1 << 8) | FLAG_A)
-# define FLAG_U		((1 << 9))
-# define FLAG_UU	((1 << 10))
-# define FLAG_G		(1 << 11 | FLAG_L)
+# define FLAG_T 	(1 << 7)
+# define FLAG_F		(1 << 8)
+# define FLAG_U		(1 << 9)
+# define FLAG_UU	(1 << 10)
+# define FLAG_G		(1 << 11)
 # define FLAG_FF	(1 << 12)
-# define FLAG_O		(1 << 14 | FLAG_L)
-# define FLAG_N		(1 << 15 | FLAG_L)
+# define FLAG_O		(1 << 14)
+# define FLAG_N		(1 << 15)
 # define FLAG_SS	(1 << 16)
 # define FLAG_C		(1 << 17)
 # define FLAG_P		(1 << 19)
 # define FLAG_TT	(1 << 20)
+# define FLAG_STAT	(1 << 21)
+# define FLAG_CC	(1 << 22)
 
 # define MAJOR(dev)	((int)(((unsigned int)(dev) >> 24) & 0xFF))
 # define MINOR(dev)	((int)((dev) & 0xFFFFFF))

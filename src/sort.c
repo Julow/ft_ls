@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 14:30:09 by jaguillo          #+#    #+#             */
-/*   Updated: 2014/11/18 14:30:11 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/07 19:19:03 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_bool	file_cmp(t_file *f1, t_file *f2, t_args *args)
 		f1->stats->st_mtimespec.tv_sec != f2->stats->st_mtimespec.tv_sec)
 		return ((f1->stats->st_mtimespec.tv_sec <
 		f2->stats->st_mtimespec.tv_sec) ? TRUE : FALSE);
-	return ((ft_strcmp(f1->name->content, f2->name->content) > 0) ? TRUE : 0);
+	return ((ft_strcmp(f1->real, f2->real) > 0) ? TRUE : 0);
 }
 
 void			filesort_t(t_array *fls, t_args *args)
