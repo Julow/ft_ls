@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 19:21:31 by jaguillo          #+#    #+#             */
-/*   Updated: 2015/01/07 18:29:58 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/12 11:47:44 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 		tmp = MAL1(t_file);
 		tmp->name = ft_stringdup(file->name);
 		tmp->path = ft_stringdup(file->path);
-		tmp->dir = opendir(file->path->content);
+		tmp->dir = NULL;//opendir(file->path->content);
 		tmp->real = ent->d_name;
-		tmp->err = errno;
+		tmp->err = 0;
 		tmp->stats = MAL1(struct stat);
 		ft_memmove(tmp->stats, file->stats, sizeof(struct stat));
 		ft_arrayadd(dirs, tmp);
@@ -63,11 +63,9 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 			ft_arrayadd(&files, tmp);
 		check_dirent(ent, dirs, tmp, args);
 	}
-	if (FLAG(FLAG_L) && files.length > 0 && (is_visible(dir->real, args) ||
-		ft_strequ(dir->real, ".")))
+	if (FLAG(FLAG_L) && files.length > 0)
 		write_total(total);
-	if (is_visible(dir->real, args) || ft_strequ(dir->real, "."))
-		ls_files(&files, args);
+	ls_files(&files, args);
 	ft_arrayclr(&files, &kill_file);
 	free(files.data);
 	if ((dir->dir != NULL && closedir(dir->dir) > 0 && FALSE) || FLAG(FLAG_RR))
@@ -89,6 +87,8 @@ void			ls_dirs(t_array *dirs, t_args *args, int f)
 	while (++i < dirs->length)
 	{
 		tmp = (t_file*)dirs->data[i];
+		tmp->dir = opendir(tmp->path->content);
+		tmp->err = errno;
 		if (args->args_count > 1 && is_visible(tmp->real, args))
 		{
 			if (i > 0 || f > 0)

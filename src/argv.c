@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 12:22:35 by jaguillo          #+#    #+#             */
-/*   Updated: 2015/01/07 19:17:07 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/12 11:35:25 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int				g_flags[] = {
 	'a', FLAG_A | FLAG_AA, 0,
 	'A', FLAG_AA, 0,
-	'f', FLAG_F | FLAG_AA, FLAG_T,
+	'f', FLAG_F | FLAG_AA | FLAG_A, FLAG_T,
 	'1', FLAG_1, FLAG_L,
 	'r', FLAG_R, 0,
 	'l', FLAG_L, FLAG_1,
@@ -51,7 +51,7 @@ static void		add_arg(t_args *targs, char *add)
 		i++;
 	}
 	free(tmp);
-	targs->args[i] = ft_strdup(add);
+	targs->args[i] = (ft_strequ(add, ".")) ? ft_strdup("./") : ft_strdup(add);
 	targs->args[i + 1] = NULL;
 	targs->args_count++;
 }
