@@ -6,7 +6,7 @@
 /*   By: jaguillo <jaguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 19:21:31 by jaguillo          #+#    #+#             */
-/*   Updated: 2015/01/12 11:47:44 by jaguillo         ###   ########.fr       */
+/*   Updated: 2015/01/12 12:18:07 by jaguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void		check_dirent(struct dirent *ent, t_array *dirs, t_file *file,
 		tmp = MAL1(t_file);
 		tmp->name = ft_stringdup(file->name);
 		tmp->path = ft_stringdup(file->path);
-		tmp->dir = NULL;//opendir(file->path->content);
+		tmp->dir = NULL;
 		tmp->real = ent->d_name;
 		tmp->err = 0;
 		tmp->stats = MAL1(struct stat);
@@ -56,7 +56,7 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 	dirs = (FLAG(FLAG_RR)) ? ft_arraynew() : NULL;
 	while (dir->dir != NULL && (ent = readdir(dir->dir)) != NULL)
 	{
-		if ((tmp = filenew(ent->d_name, dir->path->content, NULL, args)) == NULL)
+		if ((tmp = filenew(ent->d_name, dir->path->content, 0, args)) == NULL)
 			continue ;
 		total += (is_visible(tmp->real, args)) ? tmp->stats->st_blocks : 0;
 		if (is_visible(tmp->real, args))
@@ -70,6 +70,14 @@ static void		ls_dir(t_file *dir, t_args *args, t_file *tmp)
 	free(files.data);
 	if ((dir->dir != NULL && closedir(dir->dir) > 0 && FALSE) || FLAG(FLAG_RR))
 		ls_dirs(dirs, args, 1);
+}
+
+static void		print_name(int i, int f, t_file *tmp)
+{
+	if (i > 0 || f > 0)
+		ft_putchar('\n');
+	ft_putlstr(tmp->path->content, tmp->path->length);
+	ft_putstr(":\n");
 }
 
 void			ls_dirs(t_array *dirs, t_args *args, int f)
@@ -90,12 +98,7 @@ void			ls_dirs(t_array *dirs, t_args *args, int f)
 		tmp->dir = opendir(tmp->path->content);
 		tmp->err = errno;
 		if (args->args_count > 1 && is_visible(tmp->real, args))
-		{
-			if (i > 0 || f > 0)
-				ft_putchar('\n');
-			ft_putlstr(tmp->path->content, tmp->path->length);
-			ft_putstr(":\n");
-		}
+			print_name(i, f, tmp);
 		if (tmp->dir == NULL)
 			print_errno(tmp->real, tmp->err);
 		ls_dir(tmp, args, NULL);
